@@ -94,9 +94,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-  uint8_t *buff = "\the temperature is \n\r";
 
-  HAL_UART_Transmit(&huart5, (uint8_t *)buff, 17, 5000);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
