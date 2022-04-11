@@ -7,6 +7,10 @@ Cloudometer/Binaries/
 Cloudometer/Includes/
 Cloudometer/Drivers/
 Cloudometer/Debug/
+Cloudometer/.cproject
+Cloudometer/.mxproject
+Cloudometer/.project
+Cloudometer/Cloudometer.launch
 Cloudometer/Cloudometer Debug.launch
 Cloudometer/STM32L476RGTX_FLASH.ld
 Cloudometer/STM32L476RGTX_RAM.ld
