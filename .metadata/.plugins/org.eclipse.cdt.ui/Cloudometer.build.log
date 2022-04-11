@@ -1,0 +1,10 @@
+13:00:59 **** Incremental Build of configuration Debug for project Cloudometer ****
+make -j6 all 
+arm-none-eabi-size   Cloudometer.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16216	    128	   1904	  18248	   4748	Cloudometer.elf
+Finished building: default.size.stdout
+ 
+
+13:00:59 Build Finished. 0 errors, 0 warnings. (took 628ms)
+
