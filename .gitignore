@@ -7,6 +7,7 @@ Cloudometer/Binaries/
 Cloudometer/Includes/
 Cloudometer/Drivers/
 Cloudometer/Debug/
+Cloudometer/.Settings/
 Cloudometer/.cproject
 Cloudometer/.mxproject
 Cloudometer/.project
