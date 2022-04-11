@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "i2c.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
@@ -36,6 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -91,11 +93,12 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI2_Init();
   MX_UART5_Init();
+  MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
-
+  uint8_t *buff = "\\n\rThe temperature is: \r";
+  HAL_UART_Transmit(&huart5, (uint8_t *)buff, 24, 5000);
   /* USER CODE END 2 */
-  uint8_t *buff = "\the temperature is \n\r";
-  HAL_UART_Transmit(&huart5, (uint8_t *)buff, 17, 5000);
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
