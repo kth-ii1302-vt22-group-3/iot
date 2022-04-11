@@ -2,3 +2,11 @@
 .DS_Store
 Cloudometer/.DS_Store
 Cloudometer/Core/.DS_Store
+
+Cloudometer/Binaries/
+Cloudometer/Includes/
+Cloudometer/Drivers/
+Cloudometer/Debug/
+Cloudometer/Cloudometer Debug.launch
+Cloudometer/STM32L476RGTX_FLASH.ld
+Cloudometer/STM32L476RGTX_RAM.ld
