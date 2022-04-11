@@ -61,7 +61,7 @@ main-build: Cloudometer.elf secondary-outputs
 
 # Tool invocations
 Cloudometer.elf Cloudometer.map: $(OBJS) $(USER_OBJS) /Users/wilhelm/STM32CubeIDE/workspace_1.9.0/iot/Cloudometer/STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Cloudometer.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/wilhelm/STM32CubeIDE/workspace_1.9.0/iot/Cloudometer/STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Cloudometer.map" -Wl,--gc-sections -static -specs=rdimon.specs -lc -lrdimon --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "Cloudometer.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/wilhelm/STM32CubeIDE/workspace_1.9.0/iot/Cloudometer/STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Cloudometer.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

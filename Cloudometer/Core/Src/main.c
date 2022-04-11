@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -50,7 +50,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-extern void initialise_monitor_handles();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -65,7 +65,7 @@ extern void initialise_monitor_handles();
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	initialise_monitor_handles();
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -73,7 +73,6 @@ int main(void)
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  printf("Hello Init! \r\n");
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -87,11 +86,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-
-  printf("Hello GPIO! \r\n");
   MX_USART2_UART_Init();
-
-  printf("Hello UART! \r\n");
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -101,8 +96,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  printf("Hello World! \r\n");
-	  HAL_Delay(1000);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
