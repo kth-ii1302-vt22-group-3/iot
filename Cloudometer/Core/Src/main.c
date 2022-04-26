@@ -32,7 +32,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define RUN_TEST_PROGRAM			//Define if running testprogram
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -95,8 +95,14 @@ int main(void)
   MX_UART5_Init();
   MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t *buff = "\\n\rThe temperature is: \r";
-  HAL_UART_Transmit(&huart5, (uint8_t *)buff, 24, 5000);
+#ifdef RUN_TEST_PROGRAM
+  Test_program();
+#else
+  // Run program
+#endif
+
+//  uint8_t *buff = "\\n\rThe temperature is: \r";
+//  HAL_UART_Transmit(&huart5, (uint8_t *)buff, 24, 5000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -125,6 +131,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -142,6 +149,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -192,5 +200,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
