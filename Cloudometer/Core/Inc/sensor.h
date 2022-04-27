@@ -14,3 +14,4 @@
 #endif /* INC_SENSOR_H_ */
 
 void sensorStartup (void);
+uint16_t getTempVal(void);
