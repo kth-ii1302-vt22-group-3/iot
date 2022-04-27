@@ -5,6 +5,7 @@
  *      Author: natashadonner
  */
 #include <i2c.h>
+#include "tool.h"
 #ifndef INC_SENSOR_H_
 #define INC_SENSOR_H_
 

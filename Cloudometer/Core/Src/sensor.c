@@ -29,10 +29,7 @@ void sensorStartup (void){
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, reg, 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, data, 4, HAL_MAX_DELAY);
 
-	uint16_t t_out = (data[3] << 8) | data[2];
 
-
-	HAL_UART_Transmit(&huart5, (uint16_t *)t_out, 4, 5000);
 	HAL_Delay(200);
 	}
 
