@@ -1,5 +1,5 @@
 /*
- *	@brief	Init and usage of sensor functions
+ *	@brief	Sensor startup/configure function and functions to use sensor.
  *	@file	sensor.c
  *	@author	Wilhelm Nordgren
  *
@@ -14,13 +14,18 @@ static const uint8_t SENSOR_ADDR = 0x5F << 1;
 
 uint16_t buffer[12];
 uint8_t reg[1];
-uint8_t data[4];
 
+// Variables for temperature configuration
 uint16_t T0_degC;
 uint16_t T1_degC;
 uint16_t T0_OUT;
 uint16_t T1_OUT;
 
+
+/*
+ * @brief	Sensor startup and config function. Function run once at startup.
+ * @author	Wilhelm Nordgren
+ */
 void sensorStartup (void){
 	uint8_t config[2];
 
@@ -71,6 +76,12 @@ void sensorStartup (void){
 
 }
 
+/*
+ * @brief	Function to get temperature value from sensor. sensorStartup() must be run before
+ * 			getTempVal().
+ * @return	uint16_t with temperature
+ * @author	Wilhelm Nordgren
+ */
 uint16_t getTempVal (void){
 	uint16_t val;
 	reg[0]= 0xAA;
