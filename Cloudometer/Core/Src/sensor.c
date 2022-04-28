@@ -12,7 +12,7 @@
 HAL_StatusTypeDef ret;
 static const uint8_t SENSOR_ADDR = 0x5F << 1;
 
-uint16_t buffer[12];
+uint8_t buffer[12];
 uint8_t reg[1];
 
 // Variables for temperature configuration
