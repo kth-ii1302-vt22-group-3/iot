@@ -3,3 +3,4 @@
 
 void Test_sensorStartup(void);
 void Test_uartPrint (void);
+void Test_readTemp(void);
