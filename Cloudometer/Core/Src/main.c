@@ -94,6 +94,7 @@ int main(void)
   MX_SPI2_Init();
   MX_UART5_Init();
   MX_I2C3_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
 #ifdef RUN_TEST_PROGRAM
   Test_program();

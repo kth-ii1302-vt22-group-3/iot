@@ -1,9 +1,10 @@
 #include <test.h>
 
 void Test_program(void){
-	Test_sensorStartup();
-	Test_uartPrint();
-	Test_readTemp();
+//	Test_sensorStartup();
+//	Test_uartPrint();
+//	Test_readTemp();
+	Test_ATsend();
 }
 
 void Test_sensorStartup (void){
@@ -26,4 +27,13 @@ void Test_readTemp (void){
 	uartPrint((uint8_t*)tempVal, 2);
 	HAL_Delay(500);
 	}
+}
+
+void Test_ATsend (void){
+	uint8_t rxBuffer[2];
+	ATsend("AT");
+	uartPrintString("Command sent: AT");
+	HAL_UART_Receive(&huart4, rxBuffer, sizeof(rxBuffer), 1000);
+	uartPrintString("Response: ");
+	uartPrint(rxBuffer, sizeof(rxBuffer));
 }
