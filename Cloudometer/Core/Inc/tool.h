@@ -10,3 +10,4 @@
 
 void uartPrintString (char out[]);
 void uartPrint (uint8_t out[],uint8_t length);
+void ATsend (char out[]);

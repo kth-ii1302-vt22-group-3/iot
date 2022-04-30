@@ -4,3 +4,4 @@
 void Test_sensorStartup(void);
 void Test_uartPrint (void);
 void Test_readTemp(void);
+void Test_ATsend (void);

@@ -31,3 +31,12 @@ void uartPrint (uint8_t out[], uint8_t length){
 	char newline[2] = "\r\n";
 	HAL_UART_Transmit(&huart5, (uint8_t *) newline, 2, 10);
 }
+
+/*
+ *@brief	Sends an AT command over UART4
+ *@brief	Example: ATsend("AT");
+ *@author	Jesper Jansson
+ */
+void ATsend (char out[]){
+	HAL_UART_Transmit(&huart4, (uint8_t *)out, strlen(out), 1000);
+}
