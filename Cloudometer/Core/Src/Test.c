@@ -1,10 +1,17 @@
 #include <test.h>
 
+extern uint8_t rxBuffer[rxBufferSize];
+extern uint8_t rxChar[1];
+extern uint8_t rxCount;
+extern uint8_t rxWait;
+
 void Test_program(void){
 //	Test_sensorStartup();
 //	Test_uartPrint();
 //	Test_readTemp();
 	Test_ATsend();
+//	Test_UARTtransmit_IT();
+//	Test_UARTreceive_IT();
 }
 
 void Test_sensorStartup (void){
@@ -29,11 +36,13 @@ void Test_readTemp (void){
 	}
 }
 
+void Test_UARTreceive_IT(void) {
+	UARTreceiveIT(&huart5);
+	while(rxWait){}
+	uartPrint(rxBuffer, rxCount);
+}
+
 void Test_ATsend (void){
-	uint8_t rxBuffer[2];
-	ATsend("AT");
-	uartPrintString("Command sent: AT");
-	HAL_UART_Receive(&huart4, rxBuffer, sizeof(rxBuffer), 1000);
-	uartPrintString("Response: ");
-	uartPrint(rxBuffer, sizeof(rxBuffer));
+	char cmd[] = "AT+GMR";
+	ATsend(cmd);
 }

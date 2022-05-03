@@ -33,6 +33,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 #define RUN_TEST_PROGRAM			//Define if running testprogram
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -93,8 +94,9 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI2_Init();
   MX_UART5_Init();
-  MX_I2C3_Init();
   MX_UART4_Init();
+  MX_I2C3_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 #ifdef RUN_TEST_PROGRAM
   Test_program();
