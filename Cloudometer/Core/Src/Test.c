@@ -47,10 +47,12 @@ void Test_ATsend (void){
 	char cwmode[] = "AT+CWMODE=1\r\n";
 	char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
 //	char cmd[] = "AT+GMR\r\n";
-//	char cmd[] = "AT+CWQAP\r\n";
+//	char cmd2[] = "AT+CWQAP\r\n";
 	ATsend(cwmode);
-//	ATsend(cmd);
+//	ATsend(cmd2);
 	ATsend(cwjap);
+
+
 }
 
 void ATconnect(void) {

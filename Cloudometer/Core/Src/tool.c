@@ -66,13 +66,19 @@ void ATsend (char out[]){
 //}
 //
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	if((rxBuffer[rxCount - 1] != 'O') & (rxChar[0] != 'K')) {
-		rxBuffer[rxCount] = rxChar[0];
-		rxCount++;
-		HAL_UART_Receive_IT(huart, rxChar, 1);
+	if(rxChar[0] == 'K') {
+		if(rxBuffer[rxCount - 1] == 'O'){
+			rxBuffer[rxCount] = rxChar[0];
+			rxCount++;
+			rxWait = 0;
+		} else {
+			rxBuffer[rxCount] = rxChar[0];
+			rxCount++;
+			HAL_UART_Receive_IT(huart, rxChar, 1);
+		}
 	} else {
 		rxBuffer[rxCount] = rxChar[0];
 		rxCount++;
-		rxWait = 0;
+		HAL_UART_Receive_IT(huart, rxChar, 1);
 	}
 }
