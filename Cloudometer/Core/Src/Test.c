@@ -9,10 +9,10 @@ void Test_program(void){
 //	Test_sensorStartup();
 //	Test_uartPrint();
 //	Test_readTemp();
-//	Test_ATsend();
+	Test_ATsend();
 //	Test_UARTtransmit_IT();
 //	Test_UARTreceive_IT();
-	ATconnect();
+//	ATconnect();
 }
 
 void Test_sensorStartup (void){
@@ -44,11 +44,8 @@ void Test_UARTreceive_IT(void) {
 }
 
 void Test_ATsend (void){
-//	char cmd[] = "AT+GMR";
-	uint8_t atgmr[8] = {0x41, 0x54, 0x2b, 0x47, 0x4d, 0x52, 0xd, 0xa};
-
-//	uint8_t at[2] = {0x41, 0x54};
-	ATsend(atgmr);
+	char cmd[] = "AT+CWMODE=1\r\n";
+	ATsend(cmd);
 }
 
 void ATconnect(void) {
