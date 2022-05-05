@@ -44,8 +44,13 @@ void Test_UARTreceive_IT(void) {
 }
 
 void Test_ATsend (void){
-	char cmd[] = "AT+CWMODE=1\r\n";
-	ATsend(cmd);
+	char cwmode[] = "AT+CWMODE=1\r\n";
+	char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
+//	char cmd[] = "AT+GMR\r\n";
+//	char cmd[] = "AT+CWQAP\r\n";
+	ATsend(cwmode);
+//	ATsend(cmd);
+	ATsend(cwjap);
 }
 
 void ATconnect(void) {
