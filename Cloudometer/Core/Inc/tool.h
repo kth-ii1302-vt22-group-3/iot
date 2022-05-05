@@ -16,6 +16,6 @@ extern UART_HandleTypeDef huart5;
 
 void uartPrintString (char out[]);
 void uartPrint (uint8_t out[],uint8_t length);
-void ATsend (char out[]);
+void ATsend (uint8_t out[]);
 void UARTtransmit_IT (uint8_t *data, uint8_t size);
 void UARTreceiveIT(UART_HandleTypeDef *huart);

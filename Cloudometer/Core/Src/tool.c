@@ -51,12 +51,15 @@ void UARTreceiveIT(UART_HandleTypeDef *huart){
  *@brief	Example: ATsend("AT");
  *@author	Jesper Jansson
  */
-void ATsend (char out[]){
+void ATsend (uint8_t out[]){
 	rxWait = 1;
 //	char eot[2] = "\r\n";
-	uartPrintString(out);
-	uint8_t size = strlen(out);
-	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
+//	uartPrintString(out);
+	uartPrint(out, 8);
+//	uint8_t size = strlen(out);
+//	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
+
+	HAL_UART_Transmit(&huart4, out, 8, maxTimeout);
 //	HAL_UART_Transmit(&huart1, (uint8_t *)eot, 2, maxTimeout);
 	UARTreceiveIT(&huart4);
 	while(rxWait){}
