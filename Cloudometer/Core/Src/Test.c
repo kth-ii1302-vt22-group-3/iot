@@ -12,6 +12,7 @@ void Test_program(void){
 	Test_ATsend();
 //	Test_UARTtransmit_IT();
 //	Test_UARTreceive_IT();
+//	ATconnect();
 }
 
 void Test_sensorStartup (void){
@@ -43,6 +44,20 @@ void Test_UARTreceive_IT(void) {
 }
 
 void Test_ATsend (void){
-	char cmd[] = "AT+GMR";
+	char cmd[] = "AT+CWMODE=1\r\n";
 	ATsend(cmd);
+}
+
+void ATconnect(void) {
+	uint8_t rxB[2] = {'X','X'};
+	char cwmode[] = "AT+CWMODE=1\r\n";
+	uint8_t size1 = strlen(cwmode);
+	char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
+	uint8_t size2 = strlen(cwjap);
+	HAL_UART_Transmit(&huart4, (uint8_t *)cwmode, size1, 3000);
+	uartPrintString(cwmode);
+	HAL_UART_Receive(&huart4, rxB, 2, 3000);
+	uartPrint(rxB,2);
+	uartPrintString(cwjap);
+	HAL_UART_Transmit(&huart4, (uint8_t *)cwjap, size2, 3000);
 }

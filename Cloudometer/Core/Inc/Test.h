@@ -8,3 +8,4 @@ void Test_readTemp(void);
 void Test_ATsend (void);
 void Test_UARTtransmit_IT(void);
 void Test_UARTreceive_IT(void);
+void ATconnect(void);
