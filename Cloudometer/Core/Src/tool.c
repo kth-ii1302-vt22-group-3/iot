@@ -1,6 +1,8 @@
 /*@brief	File contains tools used during development and test runs.
  *@file		tool.c
  *@author	Wilhelm Nordgren
+ *@author	Jesper Jansson
+ *@author	Natasha Donner
  *
  *
  */
@@ -38,7 +40,7 @@ void uartPrint (uint8_t out[], uint8_t length){
 }
 
 /*
- *@brief	Receives data sent over UART5 until end of line is detected.
+ *@brief	Receives data sent over UART until end of line is detected.
  *@author	Jesper Jansson
  */
 void UARTreceiveIT(UART_HandleTypeDef *huart){
@@ -61,10 +63,41 @@ void ATsend (char out[]){
 	uartPrint(rxBuffer, rxCount);
 }
 
-//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-//	HAL_UART_Receive_DMA(&huart5, rxBuffer, rxBufferSize);
+/*
+ *@brief	Checks if the four first characters of an array matches the the string "ERRO".
+ *@brief	Example: isERROR(arr);
+ *@param	uint8_t arr[]
+ *@return	uint8_t; 1 if true, 0 if false.
+ *@author	Jesper Jansson
+ */
+uint8_t isERROR(uint8_t arr[]) {
+	uint8_t err[] = {'E','R','R','O','R'};
+	for(int i = 0; i < 5; i++) {
+		if(arr[i] != err[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//	rxBuffer[rxCount] = rxChar[0];
+//	rxCount++;
+//	if(rxBuffer[rxCount - 1] == 'K') {
+//		if(rxBuffer[rxCount - 2] == 'O'){
+//			rxWait = 0;
+//		} else {
+//			HAL_UART_Receive_IT(huart, rxChar, 1);
+//		}
+//	} else if (rxCount == 5) {
+//		if(isERROR(rxBuffer)) {
+//			rxWait = 0;
+//		}
+//	} else {
+//		HAL_UART_Receive_IT(huart, rxChar, 1);
+//	}
 //}
-//
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	if(rxChar[0] == 'K') {
 		if(rxBuffer[rxCount - 1] == 'O'){
