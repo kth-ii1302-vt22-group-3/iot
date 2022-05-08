@@ -8,7 +8,8 @@
 #include "usart.h"
 #include <string.h>
 
-#define rxBufferSize 128
+#define rxBufferSize 10
+#define mainBufferSize 20
 #define maxTimeout 1000
 
 extern UART_HandleTypeDef huart4;

@@ -9,6 +9,7 @@
 #include "tool.h"
 
 uint8_t rxBuffer[rxBufferSize];
+uint8_t mainBuffer[mainBufferSize];
 uint8_t rxChar[1];
 uint8_t rxCount;
 uint8_t rxWait;
@@ -44,8 +45,8 @@ void uartPrint (uint8_t out[], uint8_t length){
  *@author	Jesper Jansson
  */
 void UARTreceiveIT(UART_HandleTypeDef *huart){
-	rxWait = 1;
-	HAL_UART_Receive_IT(huart, rxChar, 1);	// Start receiving first byte
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart, rxBuffer, rxBufferSize);
+	HAL_UARTEx_RxEventCallback(huart, Size)
 }
 
 /*
@@ -54,12 +55,14 @@ void UARTreceiveIT(UART_HandleTypeDef *huart){
  *@author	Jesper Jansson
  */
 void ATsend (char out[]){
-	rxWait = 1;
 	uartPrintString(out);
 	uint8_t size = strlen(out);
 	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
-	UARTreceiveIT(&huart4);
-	while(rxWait){}
+	HAL_Delay(2000);
+	HAL_UART_Receive(&huart4, rxBuffer, 5, 5000);
+//	UARTreceiveIT(&huart4);
+//	while(rxWait){}
+//	rxCount = 0;
 	uartPrint(rxBuffer, rxCount);
 }
 
@@ -80,10 +83,11 @@ uint8_t isERROR(uint8_t arr[]) {
 	return 1;
 }
 
+
 //void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 //	rxBuffer[rxCount] = rxChar[0];
 //	rxCount++;
-//	if(rxBuffer[rxCount - 1] == 'K') {
+//	if(rxChar[0] == 'K') {
 //		if(rxBuffer[rxCount - 2] == 'O'){
 //			rxWait = 0;
 //		} else {
@@ -98,20 +102,20 @@ uint8_t isERROR(uint8_t arr[]) {
 //	}
 //}
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	if(rxChar[0] == 'K') {
-		if(rxBuffer[rxCount - 1] == 'O'){
-			rxBuffer[rxCount] = rxChar[0];
-			rxCount++;
-			rxWait = 0;
-		} else {
-			rxBuffer[rxCount] = rxChar[0];
-			rxCount++;
-			HAL_UART_Receive_IT(huart, rxChar, 1);
-		}
-	} else {
-		rxBuffer[rxCount] = rxChar[0];
-		rxCount++;
-		HAL_UART_Receive_IT(huart, rxChar, 1);
-	}
-}
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//	if(rxChar[0] == 'K') {
+//		if(rxBuffer[rxCount - 1] == 'O'){
+//			rxBuffer[rxCount] = rxChar[0];
+//			rxCount++;
+//			rxWait = 0;
+//		} else {
+//			rxBuffer[rxCount] = rxChar[0];
+//			rxCount++;
+//			HAL_UART_Receive_IT(huart, rxChar, 1);
+//		}
+//	} else {
+//		rxBuffer[rxCount] = rxChar[0];
+//		rxCount++;
+//		HAL_UART_Receive_IT(huart, rxChar, 1);
+//	}
+//}
