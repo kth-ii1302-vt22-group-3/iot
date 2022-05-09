@@ -1,10 +1,18 @@
 /*@brief	File contains tools used during development and test runs.
  *@file		tool.c
  *@author	Wilhelm Nordgren
+ *@author	Jesper Jansson
+ *@author	Natasha Donner
  *
  *
  */
 #include "tool.h"
+
+uint8_t rxBuffer[rxBufferSize];
+uint8_t mainBuffer[mainBufferSize];
+uint8_t rxChar[1];
+uint8_t rxCount;
+uint8_t rxWait;
 
 /*
  *@brief	Prints a string of chars over UART, adds carriage return and newline after.
@@ -31,3 +39,81 @@ void uartPrint (uint8_t out[], uint8_t length){
 	char newline[2] = "\r\n";
 	HAL_UART_Transmit(&huart5, (uint8_t *) newline, 2, 10);
 }
+
+/*
+ *@brief	Receives data sent over UART until end of line is detected.
+ *@author	Jesper Jansson
+ */
+void UARTreceiveIT(UART_HandleTypeDef *huart){
+//	HAL_UARTEx_ReceiveToIdle_DMA(&huart, rxBuffer, rxBufferSize);
+}
+
+/*
+ *@brief	Sends an AT command over UART4. Prints the command and received answer over UART5.
+ *@brief	Example: ATsend("AT");
+ *@author	Jesper Jansson
+ */
+void ATsend (char out[]){
+//	uartPrintString(out);
+	uint8_t size = strlen(out);
+	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
+//	HAL_UART_Receive(&huart4, rxBuffer, 5, 5000);
+//	UARTreceiveIT(&huart4);
+//	while(rxWait){}
+//	rxCount = 0;
+//	uartPrint(rxBuffer, rxCount);
+}
+
+/*
+ *@brief	Checks if the four first characters of an array matches the the string "ERRO".
+ *@brief	Example: isERROR(arr);
+ *@param	uint8_t arr[]
+ *@return	uint8_t; 1 if true, 0 if false.
+ *@author	Jesper Jansson
+ */
+uint8_t isERROR(uint8_t arr[]) {
+	uint8_t err[] = {'E','R','R','O','R'};
+	for(int i = 0; i < 5; i++) {
+		if(arr[i] != err[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//	rxBuffer[rxCount] = rxChar[0];
+//	rxCount++;
+//	if(rxChar[0] == 'K') {
+//		if(rxBuffer[rxCount - 2] == 'O'){
+//			rxWait = 0;
+//		} else {
+//			HAL_UART_Receive_IT(huart, rxChar, 1);
+//		}
+//	} else if (rxCount == 5) {
+//		if(isERROR(rxBuffer)) {
+//			rxWait = 0;
+//		}
+//	} else {
+//		HAL_UART_Receive_IT(huart, rxChar, 1);
+//	}
+//}
+
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//	if(rxChar[0] == 'K') {
+//		if(rxBuffer[rxCount - 1] == 'O'){
+//			rxBuffer[rxCount] = rxChar[0];
+//			rxCount++;
+//			rxWait = 0;
+//		} else {
+//			rxBuffer[rxCount] = rxChar[0];
+//			rxCount++;
+//			HAL_UART_Receive_IT(huart, rxChar, 1);
+//		}
+//	} else {
+//		rxBuffer[rxCount] = rxChar[0];
+//		rxCount++;
+//		HAL_UART_Receive_IT(huart, rxChar, 1);
+//	}
+//}
