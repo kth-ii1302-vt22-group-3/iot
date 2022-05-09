@@ -9,10 +9,14 @@ void Test_program(void){
 	//	Test_sensorStartup();
 	//	Test_uartPrint();
 	//	Test_readTemp();
-//	Test_ATsend();
+	//	Test_ATsend();
 	//	Test_UARTtransmit_IT();
 		Test_UARTreceive_IT();
 	//	Test_isERROR();
+}
+
+void Test_wifiStartup (void){
+
 }
 
 void Test_sensorStartup (void){
