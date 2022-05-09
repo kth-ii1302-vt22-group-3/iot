@@ -1,5 +1,6 @@
 #include "sensor.h"
 #include "tool.h"
+#include "wifi.h"
 
 void Test_program(void);
 void Test_sensorStartup(void);

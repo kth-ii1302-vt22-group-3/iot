@@ -10,7 +10,7 @@ void Test_program(void){
 	//	Test_sensorStartup();
 	//	Test_uartPrint();
 	//	Test_readTemp();
-	//	Test_ATsend();
+//		Test_ATsend();
 	//	Test_UARTtransmit_IT();
 //		Test_UARTreceive_IT();
 	//	Test_isERROR();
@@ -45,19 +45,19 @@ void Test_readTemp (void){
 
 void Test_UARTreceive_IT(void) {
 	uartPrintString("Is everything OK?");
-	UARTreceiveIT(huart5);
+//	UARTreceiveIT(huart5);
 	while(1);
 }
 
 void Test_ATsend (void){
 //	char cwmode[] = "AT+CWMODE=1\r\n";
-//		char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
-	char gmr[] = "AT+GMR\r\n";
+		char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
+//	char gmr[] = "AT+GMR\r\n";
 //		char cwqap[] = "AT+CWQAP\r\n";
-	ATsend(gmr);
+//	ATsend(gmr);
 //	ATsend(cwmode);
 //		uartPrintString("Connecting to Wifi...");
-//		ATsend(cwjap);
+		ATsend(cwjap);
 //		HAL_Delay(10000);
 //		uartPrintString("Disconnecting from Wifi...\r\n");
 //		ATsend(cwqap);

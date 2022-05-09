@@ -1,4 +1,4 @@
 #include "tool.h"
 
-void Test_wifiStartup (void);
+void wifiStartup (void);
 void connectToServer (void);

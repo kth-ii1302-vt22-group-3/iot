@@ -45,8 +45,7 @@ void uartPrint (uint8_t out[], uint8_t length){
  *@author	Jesper Jansson
  */
 void UARTreceiveIT(UART_HandleTypeDef *huart){
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart, rxBuffer, rxBufferSize);
-	HAL_UARTEx_RxEventCallback(huart, Size)
+//	HAL_UARTEx_ReceiveToIdle_DMA(&huart, rxBuffer, rxBufferSize);
 }
 
 /*
@@ -55,15 +54,14 @@ void UARTreceiveIT(UART_HandleTypeDef *huart){
  *@author	Jesper Jansson
  */
 void ATsend (char out[]){
-	uartPrintString(out);
+//	uartPrintString(out);
 	uint8_t size = strlen(out);
 	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
-	HAL_Delay(2000);
-	HAL_UART_Receive(&huart4, rxBuffer, 5, 5000);
+//	HAL_UART_Receive(&huart4, rxBuffer, 5, 5000);
 //	UARTreceiveIT(&huart4);
 //	while(rxWait){}
 //	rxCount = 0;
-	uartPrint(rxBuffer, rxCount);
+//	uartPrint(rxBuffer, rxCount);
 }
 
 /*
