@@ -54,7 +54,7 @@ void UARTreceiveIT(UART_HandleTypeDef *huart){
  *@author	Jesper Jansson
  */
 void ATsend (char out[]){
-//	uartPrintString(out);
+	uartPrintString(out);
 	uint8_t size = strlen(out);
 	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
 //	HAL_UART_Receive(&huart4, rxBuffer, 5, 5000);
