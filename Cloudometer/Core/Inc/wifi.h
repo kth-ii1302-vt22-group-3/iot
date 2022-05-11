@@ -3,3 +3,4 @@
 
 void wifiStartup (void);
 void connectToServer (void);
+char* compWifiCred (void);
