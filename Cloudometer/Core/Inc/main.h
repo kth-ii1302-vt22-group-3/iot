@@ -33,6 +33,10 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Test.h"
+#include "sensor.h"
+#include "wifi.h"
+#include "tool.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -104,15 +104,19 @@ int main(void)
 #else
   // Run program
 #endif
+  //Initialize required sensors
+  sensorStartup();
+  wifiStartup();
 
-//  uint8_t *buff = "\\n\rThe temperature is: \r";
-//  HAL_UART_Transmit(&huart5, (uint8_t *)buff, 24, 5000);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
