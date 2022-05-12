@@ -8,6 +8,7 @@
 #include "i2c.h"
 #include "usart.h"
 #include <string.h>
+#include <stdlib.h>
 
 HAL_StatusTypeDef ret;
 static const uint8_t SENSOR_ADDR = 0x5F << 1;
@@ -96,7 +97,19 @@ uint16_t getTempVal (void){
 	}
 	uint16_t T_OUT = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
 
-	val = (((T1_degC - T0_degC) * (T_OUT - T0_OUT)) / (T1_OUT - T0_OUT)) + T0_degC;
+	val = (((T1_degC - T0_degC) * (T_OUT - T0_OUT)) / (T1_OUT - T0_OUT)) + T0_degC -2;
 
 	return val;
+}
+
+void getTemp (void){
+	uint16_t val = getTempVal();
+	char *tempVal;
+	tempVal = (char *) malloc(sizeof(char) * 3);
+	tempVal[0] = (char)(val / 10) + 48;
+	tempVal[1] = (char)(val % 10) + 48;
+	tempVal[2] = "\0";
+	sendTemp(tempVal);
+	free(tempVal);
+//	return tempVal;
 }

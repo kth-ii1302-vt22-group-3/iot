@@ -6,19 +6,23 @@ extern uint8_t rxCount;
 extern uint8_t rxWait;
 
 void Test_program(void){
+	while(1){
 	Test_wifiStartup();
-	//	Test_sensorStartup();
+	Test_sensorStartup();
 	//	Test_uartPrint();
-	//	Test_readTemp();
-//		Test_ATsend();
+//		Test_readTemp();
+	//	Test_ATsend();
 	//	Test_UARTtransmit_IT();
-//		Test_UARTreceive_IT();
+	//	Test_UARTreceive_IT();
 	//	Test_isERROR();
+	HAL_Delay(5000);
+	}
+
 }
 
 void Test_wifiStartup (void){
 	wifiStartup();
-	connectToServer();
+//	connectToServer();
 }
 
 void Test_sensorStartup (void){

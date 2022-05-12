@@ -3,4 +3,6 @@
 
 void wifiStartup (void);
 void connectToServer (void);
-char* composeWifiAT (void);
+void composeWifiAT (void);
+void sendTemp (char out[]);
+void discFromServer (void);
