@@ -116,7 +116,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  connectToServer();
 
     /* USER CODE END WHILE */
 
