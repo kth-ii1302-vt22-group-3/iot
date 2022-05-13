@@ -105,11 +105,11 @@ uint16_t getTempVal (void){
 void uploadTemp (void){
 	uint16_t val = getTempVal();
 	char *tempVal;
-	tempVal = (char *) malloc(sizeof(char) * 4);
+	tempVal = (char *) malloc(sizeof(char) * 2);
 	tempVal[0] = (char)(val / 10) + 48;
 	tempVal[1] = (char)(val % 10) + 48;
-	tempVal[2] = '\r';
-	tempVal[3] = '\n';
+//	tempVal[2] = '\r';
+//	tempVal[3] = '\n';
 	sendTemp(tempVal);
 	free(tempVal);
 //	return tempVal;

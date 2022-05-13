@@ -4,6 +4,10 @@
 char network[] = "W";
 char password[] = "bogenarlos";
 
+char GETprefix[] = "GET /temperatures/new?value=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
+//char GETprefix[] = "GET /temperatures/new?value=";
+//char GETsuffix[] = " HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
+
 void wifiStartup (void){
 	ATsend("AT+RST\r\n");
 	HAL_Delay(500);
@@ -23,9 +27,8 @@ void wifiStartup (void){
 }
 
 void connectToServer (void){
-	ATsend("AT+CIPSTART=\"TCP\",\"172.20.10.3\",8080\r\n");
+	ATsend("AT+CIPSTART=\"TCP\",\"cloudometer-api.herokuapp.com\",80,60\r\n");
 	HAL_Delay(2000);
-
 }
 
 void discFromServer (void){
@@ -34,17 +37,22 @@ void discFromServer (void){
 }
 
 void sendTemp (char out[]){
-	ATsend("AT+CIPSEND=4\r\n");
+	GETprefix[28] = out[0];
+	GETprefix[29] = out[1];
+
+	ATsend("AT+CIPSEND=99\r\n");
+	HAL_Delay(500);
+	ATsend(GETprefix);
 //	ATsend(out);
 //	ATsend("\r\n");
 
-	int len = 5;
-	char *temp;
-	temp = (char *) calloc(len, sizeof(char));
-
-	strcat(temp, out);
-	ATsend(temp);
-	free(temp);
+//	int len = 5;
+//	char *temp;
+//	temp = (char *) calloc(len, sizeof(char));
+//
+//	strcat(temp, out);
+//	ATsend(temp);
+//	free(temp);
 //	static char message[4];
 //	strncat(message, out, 2);
 //	strncat(message, "\r\n", 2);
