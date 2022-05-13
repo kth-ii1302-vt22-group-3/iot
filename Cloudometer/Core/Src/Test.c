@@ -7,24 +7,24 @@ extern uint8_t rxWait;
 
 void Test_program(void){
 	while(1){
-	Test_wifiStartup();
-	Test_sensorStartup();
-	//	Test_uartPrint();
-//		Test_readTemp();
-	//	Test_ATsend();
-	//	Test_UARTtransmit_IT();
-	//	Test_UARTreceive_IT();
-	//	Test_isERROR();
-	Test_ConnectWifi();
+		//	Test_wifiStartup();
+		//	Test_sensorStartup();
+		//	Test_uartPrint();
+		//		Test_readTemp();
+		//	Test_ATsend();
+		//	Test_UARTtransmit_IT();
+		Test_UARTreceive_IT();
+		//	Test_isERROR();
+		//	Test_ConnectWifi();
 
-	HAL_Delay(5000);
+		HAL_Delay(5000);
 	}
 
 }
 
 void Test_wifiStartup (void){
 	wifiStartup();
-//	connectToServer();
+	//	connectToServer();
 }
 
 void Test_sensorStartup (void){
@@ -52,22 +52,22 @@ void Test_readTemp (void){
 
 void Test_UARTreceive_IT(void) {
 	uartPrintString("Is everything OK?");
-//	UARTreceiveIT(huart5);
-	while(1);
+	UARTreceiveIT(&huart5);
+	HAL_Delay(500);
 }
 
 void Test_ATsend (void){
-//	char cwmode[] = "AT+CWMODE=1\r\n";
-		char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
-//	char gmr[] = "AT+GMR\r\n";
-//		char cwqap[] = "AT+CWQAP\r\n";
-//	ATsend(gmr);
-//	ATsend(cwmode);
-//		uartPrintString("Connecting to Wifi...");
-		ATsend(cwjap);
-//		HAL_Delay(10000);
-//		uartPrintString("Disconnecting from Wifi...\r\n");
-//		ATsend(cwqap);
+	//	char cwmode[] = "AT+CWMODE=1\r\n";
+	char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
+	//	char gmr[] = "AT+GMR\r\n";
+	//		char cwqap[] = "AT+CWQAP\r\n";
+	//	ATsend(gmr);
+	//	ATsend(cwmode);
+	//		uartPrintString("Connecting to Wifi...");
+	ATsend(cwjap);
+	//		HAL_Delay(10000);
+	//		uartPrintString("Disconnecting from Wifi...\r\n");
+	//		ATsend(cwqap);
 }
 
 void Test_isERROR(void) {
@@ -87,7 +87,7 @@ void Test_isERROR(void) {
 
 void Test_ConnectWifi(void)
 {
-//	getUartValue();
+	//	getUartValue();
 	char wifi[] = "iPhone";
 	char password[] = "natashadonner1";
 	wifiConnect(wifi,password);

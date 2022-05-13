@@ -45,7 +45,14 @@ void uartPrint (uint8_t out[], uint8_t length){
  *@author	Jesper Jansson
  */
 void UARTreceiveIT(UART_HandleTypeDef *huart){
-//	HAL_UARTEx_ReceiveToIdle_DMA(&huart, rxBuffer, rxBufferSize);
+	rxWait = 1;
+	rxCount = 0;
+	HAL_UART_Receive_IT(huart, rxChar, 1);
+	while(rxWait){}
+	uartPrint(rxBuffer, rxCount);
+	memset(rxBuffer,0,rxBufferSize);
+	uartReset(huart);
+	rxCount = 0;
 }
 
 /*
@@ -82,23 +89,23 @@ uint8_t isERROR(uint8_t arr[]) {
 }
 
 
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-//	rxBuffer[rxCount] = rxChar[0];
-//	rxCount++;
-//	if(rxChar[0] == 'K') {
-//		if(rxBuffer[rxCount - 2] == 'O'){
-//			rxWait = 0;
-//		} else {
-//			HAL_UART_Receive_IT(huart, rxChar, 1);
-//		}
-//	} else if (rxCount == 5) {
-//		if(isERROR(rxBuffer)) {
-//			rxWait = 0;
-//		}
-//	} else {
-//		HAL_UART_Receive_IT(huart, rxChar, 1);
-//	}
-//}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	rxBuffer[rxCount] = rxChar[0];
+	rxCount++;
+	if(rxChar[0] == 'K') {
+		if(rxBuffer[rxCount - 2] == 'O'){
+			rxWait = 0;
+		} else {
+			HAL_UART_Receive_IT(huart, rxChar, 1);
+		}
+	} else if (rxCount == 5) {
+		if(isERROR(rxBuffer)) {
+			rxWait = 0;
+		}
+	} else {
+		HAL_UART_Receive_IT(huart, rxChar, 1);
+	}
+}
 
 //void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 //	if(rxChar[0] == 'K') {
@@ -121,4 +128,5 @@ uint8_t isERROR(uint8_t arr[]) {
 void uartReset(UART_HandleTypeDef *huart)
 {
 	huart->RxState = HAL_UART_STATE_READY;
+	ATOMIC_SET_BIT(huart->Instance->CR2, USART_CR2_RTOEN);
 }
