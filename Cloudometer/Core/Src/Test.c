@@ -15,6 +15,8 @@ void Test_program(void){
 	//	Test_UARTtransmit_IT();
 	//	Test_UARTreceive_IT();
 	//	Test_isERROR();
+	Test_ConnectWifi();
+
 	HAL_Delay(5000);
 	}
 
@@ -46,6 +48,7 @@ void Test_readTemp (void){
 		HAL_Delay(500);
 	}
 }
+
 
 void Test_UARTreceive_IT(void) {
 	uartPrintString("Is everything OK?");
@@ -80,4 +83,13 @@ void Test_isERROR(void) {
 	} else {
 		uartPrintString("ERROS is not ERROR");
 	}
+}
+
+void Test_ConnectWifi(void)
+{
+//	getUartValue();
+	char wifi[] = "iPhone";
+	char password[] = "natashadonner1";
+	wifiConnect(wifi,password);
+
 }

@@ -21,3 +21,4 @@ void ATsend (char out[]);
 void UARTtransmit_IT (uint8_t *data, uint8_t size);
 void UARTreceiveIT(UART_HandleTypeDef *huart);
 uint8_t isERROR(uint8_t arr[]);
+void uartReset(UART_HandleTypeDef *huart);

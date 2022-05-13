@@ -83,3 +83,39 @@ void composeWifiAT (void){
 }
 
 
+/*
+ *@brief	Receives wifi name and password. Prints name and password.
+ *@brief	Appends name and password with string.
+ *@brief	Set ESP 01 in station mode with cwmode = 1 command
+ *@brief	Connects to wifi
+ *@param 	char wifi[], char password[]
+ *@brief	Example: wifi_connect("wifi, password");
+ *@author	Natasha Donner
+ */
+void wifiConnect(char wifi[], char password[]){
+
+//	prints wifi and password
+	uartPrintString(wifi);
+	uartPrintString(password);
+
+//	append cwjap command, wifi and password into array.
+	char cwjap[100];
+	strcpy(cwjap, "AT+CWJAP=\"");
+	strcat(cwjap,wifi);
+	strcat(cwjap, "\",\"");
+	strcat(cwjap,password);
+	strcat(cwjap, "\"\r\n");
+
+	// Set ESP01 to station mode
+	char cwmode[] = "AT+CWMODE=1\r\n";
+
+
+//  send command to ESP
+	ATsend(cwmode);
+	ATsend(cwjap);
+}
+
+
+
+
+

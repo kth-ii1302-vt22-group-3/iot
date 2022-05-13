@@ -117,3 +117,8 @@ uint8_t isERROR(uint8_t arr[]) {
 //		HAL_UART_Receive_IT(huart, rxChar, 1);
 //	}
 //}
+
+void uartReset(UART_HandleTypeDef *huart)
+{
+	huart->RxState = HAL_UART_STATE_READY;
+}
