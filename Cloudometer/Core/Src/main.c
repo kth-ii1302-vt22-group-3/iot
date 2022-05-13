@@ -33,7 +33,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define RUN_TEST_PROGRAM			//Define if running testprogram
+#undef RUN_TEST_PROGRAM			//Define if running testprogram
 
 /* USER CODE END PTD */
 
@@ -107,7 +107,7 @@ int main(void)
   //Initialize required sensors
   sensorStartup();
   wifiStartup();
-
+//  char *tempVal;
 
 
   /* USER CODE END 2 */
@@ -116,7 +116,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  connectToServer();
+	  uploadTemp();
+//	  discFromServer();
 
+	  HAL_Delay(10000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
