@@ -104,10 +104,10 @@ int main(void)
 #else
   // Run program
 #endif
-  //Initialize required sensors
+  //Initialize required sensors and wifi
+  //This is done once
   sensorStartup();
   wifiStartup();
-//  char *tempVal;
 
 
   /* USER CODE END 2 */
@@ -118,8 +118,9 @@ int main(void)
   {
 	  connectToServer();
 	  uploadTemp();
-//	  discFromServer();
+//	  discFromServer();		//Needed if server doesn't disconnect
 
+	  //Upload to server interval
 	  HAL_Delay(10000);
     /* USER CODE END WHILE */
 

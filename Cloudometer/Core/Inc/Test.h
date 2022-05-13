@@ -11,3 +11,4 @@ void Test_UARTtransmit_IT(void);
 void Test_UARTreceive_IT(void);
 void Test_isERROR(void);
 void Test_wifiStartup (void);
+void Test_uploadTemp(void);

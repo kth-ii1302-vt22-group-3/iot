@@ -9,8 +9,9 @@ void Test_program(void){
 	while(1){
 	Test_wifiStartup();
 	Test_sensorStartup();
+	Test_getTempVal();
 	//	Test_uartPrint();
-//		Test_readTemp();
+	//	Test_readTemp();
 	//	Test_ATsend();
 	//	Test_UARTtransmit_IT();
 	//	Test_UARTreceive_IT();
@@ -18,6 +19,10 @@ void Test_program(void){
 	HAL_Delay(5000);
 	}
 
+}
+
+void Test_uploadTemp(void){
+	uploadTemp();
 }
 
 void Test_wifiStartup (void){

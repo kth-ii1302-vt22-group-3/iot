@@ -102,15 +102,17 @@ uint16_t getTempVal (void){
 	return val;
 }
 
+/*
+ * @brief	Function gets temperature, puts in char array and pass
+ * 			on to the wifi send function
+ * @author	Wilhelm Nordgren
+ */
 void uploadTemp (void){
 	uint16_t val = getTempVal();
 	char *tempVal;
 	tempVal = (char *) malloc(sizeof(char) * 2);
 	tempVal[0] = (char)(val / 10) + 48;
 	tempVal[1] = (char)(val % 10) + 48;
-//	tempVal[2] = '\r';
-//	tempVal[3] = '\n';
 	sendTemp(tempVal);
 	free(tempVal);
-//	return tempVal;
 }
