@@ -43,7 +43,6 @@ void sendTemp (char out[]){
 	temp = (char *) calloc(len, sizeof(char));
 
 	strcat(temp, out);
-	strcat(temp, "\r\n\0");
 	ATsend(temp);
 	free(temp);
 //	static char message[4];

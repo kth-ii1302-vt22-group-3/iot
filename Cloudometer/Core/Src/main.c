@@ -117,7 +117,7 @@ int main(void)
   while (1)
   {
 	  connectToServer();
-	  getTemp();
+	  uploadTemp();
 	  discFromServer();
 
 	  HAL_Delay(5000);

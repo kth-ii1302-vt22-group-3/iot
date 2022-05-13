@@ -15,4 +15,4 @@
 
 void sensorStartup (void);
 uint16_t getTempVal(void);
-void getTemp (void);
+void uploadTemp (void);
