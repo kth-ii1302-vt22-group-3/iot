@@ -12,3 +12,4 @@ void Test_UARTreceive_IT(void);
 void Test_isERROR(void);
 void Test_wifiStartup (void);
 void Test_ConnectWifi(void);
+void Test_sendTempAnyLengt(void);

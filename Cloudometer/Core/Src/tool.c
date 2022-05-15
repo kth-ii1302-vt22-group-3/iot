@@ -7,6 +7,8 @@
  *
  */
 #include "tool.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 uint8_t rxBuffer[rxBufferSize];
 uint8_t mainBuffer[mainBufferSize];
@@ -122,3 +124,59 @@ void uartReset(UART_HandleTypeDef *huart)
 {
 	huart->RxState = HAL_UART_STATE_READY;
 }
+
+/*
+ *@brief	Converts integer to char array
+ *@param	int integer
+ *@brief	Example: intToCharArray(24567);
+ *@author	Natasha Donner
+ */
+char* intToCharArray(int integer)
+{
+
+	int count = 0;
+    int copy = integer;
+
+    // Loop ends when count is the same as quantity of numbers in copy
+    while (copy) {
+        copy = copy/10;
+        count++;
+    }
+
+    // Char array for result
+    char* charArr;
+    charArr = (char*)malloc(count);
+
+    // Duplicate char array
+    char charArr1 [count];
+
+    int index = 0;
+
+    while (integer) {
+
+    	// Modulus with ten to get the last positioned number
+    	// Add "0" to get ASCII character
+        charArr1[++index] =  integer % 10 + '0';
+
+        // Truncate with 10
+        // 0.1 gives int = 0, will then end while loop.
+        integer /= 10;
+    }
+
+    // Reverse array to get the characters in the right position
+    int i;
+    for(i = 0; i < index; i++) {
+        charArr[i] = charArr1[index - i];
+    }
+
+    // Null character on the last index o
+    // To stop the array memory allocation
+    charArr[i] = '\0';
+
+    // Return char array
+    return (char*)charArr;
+}
+
+
+
+

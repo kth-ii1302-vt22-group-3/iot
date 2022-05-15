@@ -7,7 +7,7 @@ extern uint8_t rxWait;
 
 void Test_program(void){
 	while(1){
-	Test_wifiStartup();
+//	Test_wifiStartup();
 	Test_sensorStartup();
 	//	Test_uartPrint();
 //		Test_readTemp();
@@ -15,7 +15,8 @@ void Test_program(void){
 	//	Test_UARTtransmit_IT();
 	//	Test_UARTreceive_IT();
 	//	Test_isERROR();
-	Test_ConnectWifi();
+//	Test_ConnectWifi();
+	Test_sendTempAnyLengt();
 
 	HAL_Delay(5000);
 	}
@@ -91,5 +92,16 @@ void Test_ConnectWifi(void)
 	char wifi[] = "iPhone";
 	char password[] = "natashadonner1";
 	wifiConnect(wifi,password);
+
+}
+
+void Test_sendTempAnyLengt(void)
+{
+
+	int8_t val = getTempVal();
+	char* value = intToCharArray(val);
+	char test[] = "1237890";
+	sendTempAnyLength(value);
+	sendTempAnyLength(test);
 
 }

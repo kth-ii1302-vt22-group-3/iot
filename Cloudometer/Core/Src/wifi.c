@@ -62,6 +62,47 @@ void sendTemp (char out[]){
 	HAL_Delay(1000);
 }
 
+void sendTempAnyLength (char out[]){
+
+
+//	New version that can take any temperature size and sends it to server.
+	int8_t size_t = strlen(out);
+	char* size_out = intToCharArray(size_t);
+	int8_t size_atcipsend= 15 + size_t;
+	char atcipsend[size_atcipsend];
+	char prefix[]= "AT+CIPSEND=";
+	char newLine []= "\r\n";
+
+
+	strcpy(atcipsend, prefix);
+	strcat(atcipsend,size_out);
+	strcat(atcipsend, newLine);
+
+//	for testing purpose, send to computer via UART
+	uartPrintString(atcipsend);
+
+//	Remove comment to activate sending AT command
+//	ATsend(atcipsend);
+	HAL_Delay(500);
+
+	int8_t size_get = 97 + size_t;
+	char get[size_get];
+	char prefix_get[] = "GET /temperatures/new?value=";
+	char subfix_get[] = " HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
+	strcpy(get, prefix_get);
+	strcat(get, out);
+	strcat(get, subfix_get);
+
+//	for testing purpose, send to computer via UART
+	uartPrintString(get);
+
+//	Remove comment to activate sending AT command
+//	ATsend(get);
+	HAL_Delay(500);
+}
+
+
+
 
 void composeWifiAT (void){
 	int len = sizeof(network) - 1 + sizeof(password) - 1 + 17;
