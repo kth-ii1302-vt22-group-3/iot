@@ -45,7 +45,6 @@ void MX_UART5_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void USER_UART_IRQHandler(UART_HandleTypeDef *huart);
-void USAR_UART_IDLECallback(UART_HandleTypeDef *huart);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

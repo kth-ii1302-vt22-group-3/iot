@@ -22,7 +22,6 @@
 
 /* USER CODE BEGIN 0 */
 //uint8_t receive_buff[255];
-extern uint8_t receive_buff[255];
 
 /* USER CODE END 0 */
 
@@ -261,27 +260,5 @@ void USER_UART_IRQHandler(UART_HandleTypeDef *huart)
 
 //Declare external variables
 
-void USAR_UART_IDLECallback(UART_HandleTypeDef *huart)
-{	uint8_t receive_buff[255];
-	//Stop this DMA transmission
-    HAL_UART_DMAStop(&huart5);
-
-    //Calculate the length of the received data
-    uint8_t data_length  = BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_uart5_rx);
-
-	//Test function: Print out the received data
-//    printf("Receive Data(length = %d): ",data_length);
-    uartPrintString("\r\nIn Uart IDLE callback\r\n");
-
-
-//    printf("\r\n");
-
-	//Zero Receiving Buffer
-    memset(receive_buff,0,data_length);
-    data_length = 0;
-
-    //Restart to start DMA transmission of 255 bytes of data at a time
-    HAL_UART_Receive_DMA(&huart5, (uint8_t*)receive_buff, 255);
-}
 
 /* USER CODE END 1 */
