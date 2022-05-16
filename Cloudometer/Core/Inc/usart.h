@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "tool.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart4;
@@ -37,7 +37,10 @@ extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
 
 /* USER CODE BEGIN Private defines */
+extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart5_rx;
+
+void USER_UART_IRQHandler(UART_HandleTypeDef *huart);
 /* USER CODE END Private defines */
 
 void MX_UART4_Init(void);

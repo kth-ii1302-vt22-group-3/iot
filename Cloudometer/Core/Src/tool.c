@@ -10,6 +10,7 @@
 
 uint8_t rxBuffer[rxBufferSize];
 uint8_t mainBuffer[mainBufferSize];
+uint8_t mainBufferCount = 0;
 uint8_t rxChar[1];
 uint8_t rxCount;
 uint8_t rxWait;
@@ -55,6 +56,12 @@ void UARTreceiveIT(UART_HandleTypeDef *huart){
 	rxCount = 0;
 }
 
+void UARTreceiveDMA(UART_HandleTypeDef *huart) {
+	__HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);
+	HAL_UART_Receive_DMA(&huart5, (uint8_t *)rxBuffer, rxBufferSize);
+	HAL_Delay(5000);
+}
+
 /*
  *@brief	Sends an AT command over UART4. Prints the command and received answer over UART5.
  *@brief	Example: ATsend("AT");
@@ -88,24 +95,48 @@ uint8_t isERROR(uint8_t arr[]) {
 	return 1;
 }
 
+void USER_UART_IDLECallback(UART_HandleTypeDef *huart)
+{
+	//Stop this DMA transmission
+    HAL_UART_DMAStop(huart);
+    uint8_t data_length = 0;
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	rxBuffer[rxCount] = rxChar[0];
-	rxCount++;
-	if(rxChar[0] == 'K') {
-		if(rxBuffer[rxCount - 2] == 'O'){
-			rxWait = 0;
-		} else {
-			HAL_UART_Receive_IT(huart, rxChar, 1);
-		}
-	} else if (rxCount == 5) {
-		if(isERROR(rxBuffer)) {
-			rxWait = 0;
-		}
-	} else {
-		HAL_UART_Receive_IT(huart, rxChar, 1);
-	}
+    //Calculate the length of the received data
+    if(huart->Instance == UART4) {
+    	data_length  = rxBufferSize - __HAL_DMA_GET_COUNTER(&hdma_uart4_rx);
+    } else if(huart->Instance == UART5) {
+    	data_length  = rxBufferSize - __HAL_DMA_GET_COUNTER(&hdma_uart5_rx);
+    }
+
+	//Copy data from rxBuffer to mainBuffer
+    memcpy(mainBuffer,rxBuffer,data_length);
+    mainBufferCount = data_length;
+
+	//Zero Receiving Buffer
+    memset(rxBuffer,0,data_length);
+    data_length = 0;
+
+    //Restart to start DMA transmission of 255 bytes of data at a time
+    HAL_UART_Receive_DMA(huart, (uint8_t*)rxBuffer, rxBufferSize);
 }
+
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//	rxBuffer[rxCount] = rxChar[0];
+//	rxCount++;
+//	if(rxChar[0] == 'K') {
+//		if(rxBuffer[rxCount - 2] == 'O'){
+//			rxWait = 0;
+//		} else {
+//			HAL_UART_Receive_IT(huart, rxChar, 1);
+//		}
+//	} else if (rxCount == 5) {
+//		if(isERROR(rxBuffer)) {
+//			rxWait = 0;
+//		}
+//	} else {
+//		HAL_UART_Receive_IT(huart, rxChar, 1);
+//	}
+//}
 
 //void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 //	if(rxChar[0] == 'K') {

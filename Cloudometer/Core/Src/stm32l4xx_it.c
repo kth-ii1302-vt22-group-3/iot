@@ -56,6 +56,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart5_rx;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
@@ -211,7 +212,7 @@ void UART4_IRQHandler(void)
   /* USER CODE END UART4_IRQn 0 */
   HAL_UART_IRQHandler(&huart4);
   /* USER CODE BEGIN UART4_IRQn 1 */
-
+  USER_UART_IRQHandler(&huart4);
   /* USER CODE END UART4_IRQn 1 */
 }
 
@@ -225,7 +226,7 @@ void UART5_IRQHandler(void)
   /* USER CODE END UART5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);
   /* USER CODE BEGIN UART5_IRQn 1 */
-
+  USER_UART_IRQHandler(&huart5);
   /* USER CODE END UART5_IRQn 1 */
 }
 
@@ -241,6 +242,20 @@ void DMA2_Channel2_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Channel2_IRQn 1 */
 
   /* USER CODE END DMA2_Channel2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA2 channel5 global interrupt.
+  */
+void DMA2_Channel5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Channel5_IRQn 0 */
+
+  /* USER CODE END DMA2_Channel5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_uart4_rx);
+  /* USER CODE BEGIN DMA2_Channel5_IRQn 1 */
+
+  /* USER CODE END DMA2_Channel5_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

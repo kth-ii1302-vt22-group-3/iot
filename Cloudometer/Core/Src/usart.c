@@ -26,6 +26,7 @@
 
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
+DMA_HandleTypeDef hdma_uart4_rx;
 DMA_HandleTypeDef hdma_uart5_rx;
 
 /* UART4 init function */
@@ -54,7 +55,7 @@ void MX_UART4_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN UART4_Init 2 */
-
+  __HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);  // Enable serial port idle interrupt
   /* USER CODE END UART4_Init 2 */
 
 }
@@ -84,7 +85,7 @@ void MX_UART5_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN UART5_Init 2 */
-
+  __HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);  // Enable serial port idle interrupt
   /* USER CODE END UART5_Init 2 */
 
 }
@@ -117,16 +118,38 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     PA0     ------> UART4_TX
     PA1     ------> UART4_RX
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
+    GPIO_InitStruct.Pin = GPIO_PIN_0;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    /* UART4 interrupt Init */
-    HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(UART4_IRQn);
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    /* UART4 DMA Init */
+    /* UART4_RX Init */
+    hdma_uart4_rx.Instance = DMA2_Channel5;
+    hdma_uart4_rx.Init.Request = DMA_REQUEST_2;
+    hdma_uart4_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_uart4_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_uart4_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_uart4_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_uart4_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_uart4_rx.Init.Mode = DMA_CIRCULAR;
+    hdma_uart4_rx.Init.Priority = DMA_PRIORITY_LOW;
+    if (HAL_DMA_Init(&hdma_uart4_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(uartHandle,hdmarx,hdma_uart4_rx);
+
   /* USER CODE BEGIN UART4_MspInit 1 */
 
   /* USER CODE END UART4_MspInit 1 */
@@ -164,8 +187,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 
     GPIO_InitStruct.Pin = GPIO_PIN_2;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF8_UART5;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
@@ -187,9 +210,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 
     __HAL_LINKDMA(uartHandle,hdmarx,hdma_uart5_rx);
 
-    /* UART5 interrupt Init */
-    HAL_NVIC_SetPriority(UART5_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(UART5_IRQn);
   /* USER CODE BEGIN UART5_MspInit 1 */
 
   /* USER CODE END UART5_MspInit 1 */
@@ -212,6 +232,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PA1     ------> UART4_RX
     */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0|GPIO_PIN_1);
+
+    /* UART4 DMA DeInit */
+    HAL_DMA_DeInit(uartHandle->hdmarx);
 
     /* UART4 interrupt Deinit */
     HAL_NVIC_DisableIRQ(UART4_IRQn);
@@ -247,5 +270,16 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void USER_UART_IRQHandler(UART_HandleTypeDef *huart)
+{
+    if(UART5 == huart5.Instance)                                   //Determine whether it is serial port 1
+    {
+        if(RESET != __HAL_UART_GET_FLAG(&huart5, UART_FLAG_IDLE))   //Judging whether it is idle interruption
+        {
+            __HAL_UART_CLEAR_IDLEFLAG(&huart5);                     //Clear idle interrupt sign (otherwise it will continue to enter interrupt)
+            USER_UART_IDLECallback(huart);                          //Call interrupt handler
+        }
+    }
+}
 
 /* USER CODE END 1 */

@@ -1,6 +1,8 @@
 #include <test.h>
 
 extern uint8_t rxBuffer[rxBufferSize];
+extern uint8_t mainBuffer[rxBufferSize];
+extern uint8_t mainBufferCount;
 extern uint8_t rxChar[1];
 extern uint8_t rxCount;
 extern uint8_t rxWait;
@@ -13,7 +15,8 @@ void Test_program(void){
 		//		Test_readTemp();
 		//	Test_ATsend();
 		//	Test_UARTtransmit_IT();
-		Test_UARTreceive_IT();
+//		Test_UARTreceive_IT();
+		Test_UARTreceive_DMA();
 		//	Test_isERROR();
 		//	Test_ConnectWifi();
 
@@ -54,6 +57,12 @@ void Test_UARTreceive_IT(void) {
 	uartPrintString("Is everything OK?");
 	UARTreceiveIT(&huart5);
 	HAL_Delay(500);
+}
+
+void Test_UARTreceive_DMA(void) {
+	uartPrintString("PING");
+	UARTreceiveDMA(&huart5);
+	uartPrint(mainBuffer, mainBufferCount);
 }
 
 void Test_ATsend (void){
