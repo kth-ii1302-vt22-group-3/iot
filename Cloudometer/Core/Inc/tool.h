@@ -24,3 +24,4 @@ uint8_t isERROR(uint8_t arr[]);
 void uartReset(UART_HandleTypeDef *huart);
 char* intToCharArray(int integer);
 void USAR_UART_IDLECallback(UART_HandleTypeDef *huart);
+void UARTreceiveDMA(UART_HandleTypeDef *huart);

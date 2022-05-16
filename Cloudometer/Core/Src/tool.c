@@ -10,12 +10,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+uint8_t buff[255];
 uint8_t rxBuffer[rxBufferSize];
 uint8_t mainBuffer[mainBufferSize];
+uint8_t mainBufferCount = 0;
 uint8_t rxChar[1];
 uint8_t rxCount;
 uint8_t rxWait;
-
 
 /*
  *@brief	Prints a string of chars over UART, adds carriage return and newline after.
@@ -187,20 +188,27 @@ void USAR_UART_IDLECallback(UART_HandleTypeDef *huart)
 
 	//Test function: Print out the received data
 //    printf("Receive Data(length = %d): ",data_length);
-    uartPrintString("\r\nIn Uart IDLE callback\r\n");
+//    uartPrintString("\r\nIn Uart IDLE callback\r\n");
     //Copy data from rxBuffer to mainBuffer
     memcpy(mainBuffer,rxBuffer,data_length);
     mainBufferCount = data_length;
 
-
 //    printf("\r\n");
 
 	//Zero Receiving Buffer
-    memset(receive_buff,0,data_length);
+    memset(rxBuffer,0,data_length);
     data_length = 0;
 
     //Restart to start DMA transmission of 255 bytes of data at a time
     HAL_UART_Receive_DMA(&huart5, (uint8_t*)receive_buff, 255);
+}
+
+void UARTreceiveDMA(UART_HandleTypeDef *huart) {
+	__HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);
+	HAL_UART_Receive_DMA(&huart5, (uint8_t*)buff, 255);
+	HAL_Delay(1000);
+	uartPrint(buff, mainBufferCount);
+
 }
 
 

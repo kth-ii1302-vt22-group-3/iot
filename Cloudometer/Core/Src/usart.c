@@ -252,7 +252,7 @@ void USER_UART_IRQHandler(UART_HandleTypeDef *huart)
         if(RESET != __HAL_UART_GET_FLAG(&huart5, UART_FLAG_IDLE))   //Judging whether it is idle interruption
         {
             __HAL_UART_CLEAR_IDLEFLAG(&huart5);                     //Clear idle interrupt sign (otherwise it will continue to enter interrupt)
-            uartPrintString("\r\nUART5 Idle IQR Detected\r\n");
+//            uartPrintString("\r\nUART5 Idle IQR Detected\r\n");
             USAR_UART_IDLECallback(huart);                          //Call interrupt handler
         }
     }
