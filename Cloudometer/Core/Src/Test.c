@@ -8,22 +8,24 @@ extern uint8_t rxWait;
 
 void Test_program(void){
 
-//	Test_wifiStartup();
+	//	Test_wifiStartup();
 	Test_sensorStartup();
 	while(1){
-	Test_getHumidVal();
-//	Test_uploadTemp();
-	//	Test_uartPrint();
-	//	Test_readTemp();
-	//	Test_ATsend();
-	//	Test_UARTtransmit_IT();
-	//	Test_UARTreceive_IT();
-	//	Test_isERROR();
-//	Test_ConnectWifi();
+		uartPrintString("Humidity is: ");
+		Test_getHumidVal();
+		uartPrintString("Temperature is:");
+		Test_readTemp();
+		//	Test_uploadTemp();
+		//	Test_uartPrint();
+		//	Test_readTemp();
+		//	Test_ATsend();
+		//	Test_UARTtransmit_IT();
+		//	Test_UARTreceive_IT();
+		//	Test_isERROR();
+		//	Test_ConnectWifi();
 
-	HAL_Delay(5000);
+		HAL_Delay(2000);
 	}
-
 }
 
 void Test_getHumidVal(void){
@@ -35,9 +37,8 @@ void Test_getHumidVal(void){
 		humidVal[1] = (char)(val % 10) + 48;
 
 //		uint8_t array[1] = {(val & 0x0F) + 48};
-		uartPrintString("Humidity is: ");
+
 		uartPrint(humidVal, 2);
-		HAL_Delay(1000);
 //	}
 }
 
@@ -65,15 +66,12 @@ void Test_uartPrint (void){
 }
 
 void Test_readTemp (void){
-	while(1){
+
 		uint16_t val = getTempVal();
 		uint8_t tempVal[2];
 		tempVal[0] = (val / 10) + 48;
 		tempVal[1] = (val % 10) + 48;
-
 		uartPrint((uint8_t*)tempVal, 2);
-		HAL_Delay(500);
-	}
 }
 
 

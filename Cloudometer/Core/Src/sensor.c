@@ -22,10 +22,10 @@ uint16_t T1_degC;
 uint16_t T0_OUT;
 uint16_t T1_OUT;
 
-uint16_t H0_rH;
-uint16_t H1_rH;
-uint16_t H0_OUT;
-uint16_t H1_OUT;
+int16_t H0_rH;
+int16_t H1_rH;
+int16_t H0_OUT;
+int16_t H1_OUT;
 
 
 /*
@@ -97,22 +97,22 @@ void sensorStartup (void){
 	config[0] = 0x36;
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
-	H0_OUT = buffer[0];
+	H0_OUT = (uint16_t)buffer[0];
 
 	config[0] = 0x37;
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
-	H0_OUT = H0_OUT | (buffer[0] << 8);
+	H0_OUT = (uint16_t) H0_OUT | (uint16_t)(buffer[0] << 8);
 
 	config[0] = 0x3A;
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
-	H1_OUT = buffer[0];
+	H1_OUT = (uint16_t) buffer[0];
 
 	config[0] = 0x3B;
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
-	H1_OUT = H1_OUT | (buffer[0] << 8);
+	H1_OUT = (uint16_t) H1_OUT | (uint16_t) (buffer[0] << 8);
 
 }
 
@@ -142,7 +142,7 @@ uint16_t getTempVal (void){
 }
 
 uint16_t getHumidVal (void){
-	uint16_t	val;
+	int32_t val = 0;
 	reg[0]= 0xA8;
 	ret = HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, reg, 1, HAL_MAX_DELAY);
 	if ( ret != HAL_OK ) {
@@ -153,11 +153,14 @@ uint16_t getHumidVal (void){
 			strcpy((char*)buffer, "Error Rx\r\n");
 		}
 	}
-	uint16_t H_OUT = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
+	int16_t H_OUT = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
 
-	val = (((H1_rH - H0_rH) * (H_OUT - H0_OUT)) / (H1_OUT - H0_OUT)) + H0_rH ;
+	val = (int32_t) (H_OUT - H0_OUT) * (int32_t)(H1_rH - H0_rH) * 10;
+	uint16_t retVal = (uint16_t) (val / (H1_OUT - H0_OUT) + H0_rH * 10);
 
-	return val;
+//	val = (((H1_rH - H0_rH) * (H_OUT - H0_OUT)) / (H1_OUT - H0_OUT)) + H0_rH ;
+//	return val;
+	return retVal / 10;
 }
 
 /*
