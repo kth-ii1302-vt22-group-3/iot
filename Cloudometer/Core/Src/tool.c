@@ -16,6 +16,7 @@ uint8_t rxChar[1];
 uint8_t rxCount;
 uint8_t rxWait;
 
+
 /*
  *@brief	Prints a string of chars over UART, adds carriage return and newline after.
  *@brief	Example: uartPrintString("Hello World!");

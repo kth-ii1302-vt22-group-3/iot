@@ -4,6 +4,7 @@ extern uint8_t rxBuffer[rxBufferSize];
 extern uint8_t rxChar[1];
 extern uint8_t rxCount;
 extern uint8_t rxWait;
+uint8_t receive_buff[255];                //Define the receive array
 
 void Test_program(void){
 	while(1){
@@ -16,8 +17,8 @@ void Test_program(void){
 	//	Test_UARTreceive_IT();
 	//	Test_isERROR();
 //	Test_ConnectWifi();
-	Test_sendTempAnyLengt();
-
+//	Test_sendTempAnyLengt();
+	Test_DMA();
 	HAL_Delay(5000);
 	}
 
@@ -103,5 +104,17 @@ void Test_sendTempAnyLengt(void)
 	char test[] = "1237890";
 	sendTempAnyLength(value);
 	sendTempAnyLength(test);
+
+}
+
+void Test_DMA(void)
+{
+	char resp[] = "response";
+	uartPrintString(resp);
+	__HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);
+	HAL_UART_Receive_DMA(&huart5, (uint8_t*)receive_buff, 255); //Set up the DMA transmission to move the data of serial port 1 to recvive_buff, 255 bytes at a time
+	HAL_Delay(500);
+	HAL_UART_Transmit(&huart5, (uint8_t*)receive_buff, 255, 1000);
+
 
 }

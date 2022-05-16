@@ -28,12 +28,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#undef RUN_TEST_PROGRAM			//Define if running testprogram
+#define RUN_TEST_PROGRAM			//Define if running testprogram
 
 /* USER CODE END PTD */
 
@@ -55,6 +54,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -98,6 +98,9 @@ int main(void)
   MX_DMA_Init();
   MX_I2C3_Init();
   MX_UART4_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 #ifdef RUN_TEST_PROGRAM
   Test_program();
@@ -114,6 +117,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+
   while (1)
   {
 	  connectToServer();
@@ -175,6 +180,20 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* UART5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(UART5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(UART5_IRQn);
+  /* DMA2_Channel2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Channel2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Channel2_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

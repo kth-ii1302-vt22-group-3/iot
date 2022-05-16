@@ -21,6 +21,8 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
+//uint8_t receive_buff[255];
+extern uint8_t receive_buff[255];
 
 /* USER CODE END 0 */
 
@@ -164,7 +166,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 
     GPIO_InitStruct.Pin = GPIO_PIN_2;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF8_UART5;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
@@ -178,7 +180,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_uart5_rx.Init.MemInc = DMA_MINC_ENABLE;
     hdma_uart5_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_uart5_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_uart5_rx.Init.Mode = DMA_NORMAL;
+    hdma_uart5_rx.Init.Mode = DMA_CIRCULAR;
     hdma_uart5_rx.Init.Priority = DMA_PRIORITY_LOW;
     if (HAL_DMA_Init(&hdma_uart5_rx) != HAL_OK)
     {
@@ -187,9 +189,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 
     __HAL_LINKDMA(uartHandle,hdmarx,hdma_uart5_rx);
 
-    /* UART5 interrupt Init */
-    HAL_NVIC_SetPriority(UART5_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(UART5_IRQn);
   /* USER CODE BEGIN UART5_MspInit 1 */
 
   /* USER CODE END UART5_MspInit 1 */
@@ -247,5 +246,42 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void USER_UART_IRQHandler(UART_HandleTypeDef *huart)
+{
+    if(UART5 == huart5.Instance)                                   //Determine whether it is serial port 1
+    {
+        if(RESET != __HAL_UART_GET_FLAG(&huart5, UART_FLAG_IDLE))   //Judging whether it is idle interruption
+        {
+            __HAL_UART_CLEAR_IDLEFLAG(&huart5);                     //Clear idle interrupt sign (otherwise it will continue to enter interrupt)
+            uartPrintString("\r\nUART5 Idle IQR Detected\r\n");
+            USAR_UART_IDLECallback(huart);                          //Call interrupt handler
+        }
+    }
+}
+
+//Declare external variables
+
+void USAR_UART_IDLECallback(UART_HandleTypeDef *huart)
+{	uint8_t receive_buff[255];
+	//Stop this DMA transmission
+    HAL_UART_DMAStop(&huart5);
+
+    //Calculate the length of the received data
+    uint8_t data_length  = BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_uart5_rx);
+
+	//Test function: Print out the received data
+//    printf("Receive Data(length = %d): ",data_length);
+    uartPrintString("\r\nIn Uart IDLE callback\r\n");
+
+
+//    printf("\r\n");
+
+	//Zero Receiving Buffer
+    memset(receive_buff,0,data_length);
+    data_length = 0;
+
+    //Restart to start DMA transmission of 255 bytes of data at a time
+    HAL_UART_Receive_DMA(&huart5, (uint8_t*)receive_buff, 255);
+}
 
 /* USER CODE END 1 */
