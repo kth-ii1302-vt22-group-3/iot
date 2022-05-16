@@ -22,6 +22,11 @@ uint16_t T1_degC;
 uint16_t T0_OUT;
 uint16_t T1_OUT;
 
+uint16_t H0_rH;
+uint16_t H1_rH;
+uint16_t H0_OUT;
+uint16_t H1_OUT;
+
 
 /*
  * @brief	Sensor startup and config function. Function run once at startup.
@@ -36,7 +41,7 @@ void sensorStartup (void){
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 2, HAL_MAX_DELAY);
 	HAL_Delay(100);
 
-	//Get calibration values
+	//Get calibration values for temperature
 
 	config[0] = 0x32;
 	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
@@ -75,6 +80,40 @@ void sensorStartup (void){
 	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
 	T1_OUT = (buffer[0]<<8) | T1_OUT;
 
+	//Get calibration values for humidity
+
+	config[0] = 0x30;
+	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
+	H0_rH = buffer[0];
+	H0_rH = H0_rH / 2;
+
+	config[0] = 0x31;
+	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
+	H1_rH = buffer[0];
+	H1_rH = H1_rH / 2;
+
+	config[0] = 0x36;
+	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
+	H0_OUT = buffer[0];
+
+	config[0] = 0x37;
+	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
+	H0_OUT = H0_OUT | (buffer[0] << 8);
+
+	config[0] = 0x3A;
+	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
+	H1_OUT = buffer[0];
+
+	config[0] = 0x3B;
+	HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, config, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 1, HAL_MAX_DELAY);
+	H1_OUT = H1_OUT | (buffer[0] << 8);
+
 }
 
 /*
@@ -98,6 +137,25 @@ uint16_t getTempVal (void){
 	uint16_t T_OUT = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
 
 	val = (((T1_degC - T0_degC) * (T_OUT - T0_OUT)) / (T1_OUT - T0_OUT)) + T0_degC -2;
+
+	return val;
+}
+
+uint16_t getHumidVal (void){
+	uint16_t	val;
+	reg[0]= 0xA8;
+	ret = HAL_I2C_Master_Transmit(&hi2c3, SENSOR_ADDR, reg, 1, HAL_MAX_DELAY);
+	if ( ret != HAL_OK ) {
+		strcpy((char*)buffer, "Error Tx\r\n");
+	}else{
+		ret = HAL_I2C_Master_Receive(&hi2c3, SENSOR_ADDR, buffer, 2, HAL_MAX_DELAY);
+		if ( ret != HAL_OK ) {
+			strcpy((char*)buffer, "Error Rx\r\n");
+		}
+	}
+	uint16_t H_OUT = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
+
+	val = (((H1_rH - H0_rH) * (H_OUT - H0_OUT)) / (H1_OUT - H0_OUT)) + H0_rH ;
 
 	return val;
 }

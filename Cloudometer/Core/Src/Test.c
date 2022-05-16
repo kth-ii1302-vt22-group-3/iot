@@ -1,4 +1,5 @@
 #include <test.h>
+#include <stdlib.h>
 
 extern uint8_t rxBuffer[rxBufferSize];
 extern uint8_t rxChar[1];
@@ -6,20 +7,41 @@ extern uint8_t rxCount;
 extern uint8_t rxWait;
 
 void Test_program(void){
-	while(1){
-	Test_wifiStartup();
+
+//	Test_wifiStartup();
 	Test_sensorStartup();
-	Test_getTempVal();
+	while(1){
+	Test_getHumidVal();
+//	Test_uploadTemp();
 	//	Test_uartPrint();
 	//	Test_readTemp();
 	//	Test_ATsend();
 	//	Test_UARTtransmit_IT();
 	//	Test_UARTreceive_IT();
 	//	Test_isERROR();
-	Test_ConnectWifi();
+//	Test_ConnectWifi();
 
 	HAL_Delay(5000);
 	}
+
+}
+
+void Test_getHumidVal(void){
+//	while(1){
+		uint16_t val = getHumidVal();
+		char *humidVal;
+		humidVal = (char *) malloc(sizeof(char) * 2);
+		humidVal[0] = (char)(val / 10) + 48;
+		humidVal[1] = (char)(val % 10) + 48;
+
+//		uint8_t array[1] = {(val & 0x0F) + 48};
+		uartPrintString("Humidity is: ");
+		uartPrint(humidVal, 2);
+		HAL_Delay(1000);
+//	}
+}
+
+void Test_uploadHumid(void){
 
 }
 

@@ -33,7 +33,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#undef RUN_TEST_PROGRAM			//Define if running testprogram
+#define RUN_TEST_PROGRAM			//Define if running testprogram
 
 /* USER CODE END PTD */
 

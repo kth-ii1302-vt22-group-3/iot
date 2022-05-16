@@ -13,3 +13,5 @@ void Test_isERROR(void);
 void Test_wifiStartup (void);
 void Test_uploadTemp(void);
 void Test_ConnectWifi(void);
+void Test_getHumidVal(void);
+void Test_uploadHumid(void);
