@@ -29,21 +29,17 @@ void Test_program(void){
 }
 
 void Test_getHumidVal(void){
-//	while(1){
+
 		uint16_t val = getHumidVal();
 		char *humidVal;
 		humidVal = (char *) malloc(sizeof(char) * 2);
 		humidVal[0] = (char)(val / 10) + 48;
 		humidVal[1] = (char)(val % 10) + 48;
-
-//		uint8_t array[1] = {(val & 0x0F) + 48};
-
-		uartPrint(humidVal, 2);
-//	}
+		uartPrint((uint8_t*)humidVal, 2);
 }
 
 void Test_uploadHumid(void){
-
+	uploadHumid();
 }
 
 void Test_uploadTemp(void){

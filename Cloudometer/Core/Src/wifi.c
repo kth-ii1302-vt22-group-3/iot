@@ -5,6 +5,7 @@ char network[] = "W";
 char password[] = "bogenarlos";
 
 char GETprefix[] = "GET /temperatures/new?value=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
+char GETprefixHumid[] = "GET /temperatures/new?humid=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
 //char GETprefix[] = "GET /temperatures/new?value=";
 //char GETsuffix[] = " HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
 
@@ -59,6 +60,21 @@ void sendTemp (char out[]){
 	ATsend(GETprefix);
 	HAL_Delay(1000);
 }
+
+/*
+ * @brief	Sends temperature to server
+ * @param	A 2-length char array[] with temperature
+ * @author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
+void sendHumid (char out[]){
+	GETprefixHumid[28] = out[0];
+	GETprefixHumid[29] = out[1];
+	ATsend("AT+CIPSEND=99\r\n");
+	HAL_Delay(500);
+	ATsend(GETprefixHumid);
+	HAL_Delay(1000);
+}
+
 
 /*
  * @brief	Function to connect to the wifi specified in network
