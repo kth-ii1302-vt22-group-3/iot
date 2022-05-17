@@ -7,9 +7,13 @@
  *
  */
 #include "tool.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+uint8_t buff[255];
 uint8_t rxBuffer[rxBufferSize];
 uint8_t mainBuffer[mainBufferSize];
+uint8_t mainBufferCount = 0;
 uint8_t rxChar[1];
 uint8_t rxCount;
 uint8_t rxWait;
@@ -122,3 +126,92 @@ void uartReset(UART_HandleTypeDef *huart)
 {
 	huart->RxState = HAL_UART_STATE_READY;
 }
+
+/*
+ *@brief	Converts integer to char array
+ *@param	int integer
+ *@brief	Example: intToCharArray(24567);
+ *@author	Natasha Donner
+ */
+char* intToCharArray(int integer)
+{
+
+	int count = 0;
+    int copy = integer;
+
+    // Loop ends when count is the same as quantity of numbers in copy
+    while (copy) {
+        copy = copy/10;
+        count++;
+    }
+
+    // Char array for result
+    char* charArr;
+    charArr = (char*)malloc(count);
+
+    // Duplicate char array
+    char charArr1 [count];
+
+    int index = 0;
+
+    while (integer) {
+
+    	// Modulus with ten to get the last positioned number
+    	// Add "0" to get ASCII character
+        charArr1[++index] =  integer % 10 + '0';
+
+        // Truncate with 10
+        // 0.1 gives int = 0, will then end while loop.
+        integer /= 10;
+    }
+
+    // Reverse array to get the characters in the right position
+    int i;
+    for(i = 0; i < index; i++) {
+        charArr[i] = charArr1[index - i];
+    }
+
+    // Null character on the last index o
+    // To stop the array memory allocation
+    charArr[i] = '\0';
+
+    // Return char array
+    return (char*)charArr;
+}
+void USAR_UART_IDLECallback(UART_HandleTypeDef *huart)
+{	uint8_t receive_buff[255];
+	//Stop this DMA transmission
+    HAL_UART_DMAStop(&huart5);
+
+    //Calculate the length of the received data
+    uint8_t data_length  = BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_uart5_rx);
+
+	//Test function: Print out the received data
+//    printf("Receive Data(length = %d): ",data_length);
+//    uartPrintString("\r\nIn Uart IDLE callback\r\n");
+    //Copy data from rxBuffer to mainBuffer
+    memcpy(mainBuffer,rxBuffer,data_length);
+    mainBufferCount = data_length;
+
+//    printf("\r\n");
+
+	//Zero Receiving Buffer
+    memset(rxBuffer,0,data_length);
+    data_length = 0;
+
+    //Restart to start DMA transmission of 255 bytes of data at a time
+    HAL_UART_Receive_DMA(&huart5, (uint8_t*)receive_buff, 255);
+}
+
+void UARTreceiveDMA(UART_HandleTypeDef *huart) {
+	__HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);
+	HAL_UART_Receive_DMA(&huart5, (uint8_t*)buff, 255);
+	HAL_Delay(1000);
+	uartPrint(buff, mainBufferCount);
+
+}
+
+
+
+
+

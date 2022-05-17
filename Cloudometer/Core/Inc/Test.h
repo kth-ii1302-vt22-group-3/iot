@@ -1,6 +1,7 @@
 #include "sensor.h"
 #include "tool.h"
 #include "wifi.h"
+//#include "usart.h"
 
 void Test_program(void);
 void Test_sensorStartup(void);
@@ -12,3 +13,6 @@ void Test_UARTreceive_IT(void);
 void Test_isERROR(void);
 void Test_wifiStartup (void);
 void Test_ConnectWifi(void);
+void Test_sendTempAnyLengt(void);
+void Test_DMA(void);
+
