@@ -99,7 +99,10 @@ void Test_readTemp (void){
 void Test_UARTreceive_IT(void) {
 	uartPrintString("Write something!");
 	UARTreceiveIT(&huart5);
-	HAL_Delay(5000);
+	while(rxWait) {
+
+	}
+	uartPrint(rxBuffer, rxBufferSize);
 }
 
 /*
