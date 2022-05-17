@@ -141,7 +141,9 @@ void Test_isERROR(void) {
 }
 
 /*
- *
+ *@brief	Tests wifiConnect
+ *@brief	Hardcoded wifi name and password
+ *@author	Natasha Donner
  */
 void Test_ConnectWifi(void)
 {
@@ -152,7 +154,9 @@ void Test_ConnectWifi(void)
 }
 
 /*
- *
+ *@brief	Tests sendTempAnyLength()
+ *@brief	Sends value with 2bytes and 7bytes
+ *@author	Natasha Donner
  */
 void Test_sendTempAnyLengt(void)
 {
@@ -163,12 +167,3 @@ void Test_sendTempAnyLengt(void)
 	sendTempAnyLength(test);
 }
 
-/*
- *
- */
-void Test_DMA(void)
-{
-	uartPrintString("RESPONSE");
-	UARTreceiveDMA(&huart5);
-	uartPrint(mainBuffer, mainBufferCount);
-}
