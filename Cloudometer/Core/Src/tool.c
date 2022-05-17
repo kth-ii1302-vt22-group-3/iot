@@ -45,27 +45,13 @@ void uartPrint (uint8_t out[], uint8_t length){
 }
 
 /*
- *@brief	Receives data sent over UART until end of line is detected.
- *@author	Jesper Jansson
- */
-void UARTreceiveIT(UART_HandleTypeDef *huart){
-//	HAL_UARTEx_ReceiveToIdle_DMA(&huart, rxBuffer, rxBufferSize);
-}
-
-/*
  *@brief	Sends an AT command over UART4. Prints the command and received answer over UART5.
  *@brief	Example: ATsend("AT");
  *@author	Jesper Jansson
  */
 void ATsend (char out[]){
-	uartPrintString(out);
 	uint8_t size = strlen(out);
 	HAL_UART_Transmit(&huart4, (uint8_t *)out, size, maxTimeout);
-//	HAL_UART_Receive(&huart4, rxBuffer, 5, 5000);
-//	UARTreceiveIT(&huart4);
-//	while(rxWait){}
-//	rxCount = 0;
-//	uartPrint(rxBuffer, rxCount);
 }
 
 /*
@@ -85,43 +71,30 @@ uint8_t isERROR(uint8_t arr[]) {
 	return 1;
 }
 
+/*
+ * @brief
+ */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	rxBuffer[rxCount] = rxChar[0];
+	rxCount++;
+	if(rxChar[0] == 'K') {
+		if(rxBuffer[rxCount - 2] == 'O'){
+			rxWait = 0;
+		} else {
+			HAL_UART_Receive_IT(huart, rxChar, 1);
+		}
+	} else if (rxCount == 5) {
+		if(isERROR(rxBuffer)) {
+			rxWait = 0;
+		}
+	} else {
+		HAL_UART_Receive_IT(huart, rxChar, 1);
+	}
+}
 
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-//	rxBuffer[rxCount] = rxChar[0];
-//	rxCount++;
-//	if(rxChar[0] == 'K') {
-//		if(rxBuffer[rxCount - 2] == 'O'){
-//			rxWait = 0;
-//		} else {
-//			HAL_UART_Receive_IT(huart, rxChar, 1);
-//		}
-//	} else if (rxCount == 5) {
-//		if(isERROR(rxBuffer)) {
-//			rxWait = 0;
-//		}
-//	} else {
-//		HAL_UART_Receive_IT(huart, rxChar, 1);
-//	}
-//}
-
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-//	if(rxChar[0] == 'K') {
-//		if(rxBuffer[rxCount - 1] == 'O'){
-//			rxBuffer[rxCount] = rxChar[0];
-//			rxCount++;
-//			rxWait = 0;
-//		} else {
-//			rxBuffer[rxCount] = rxChar[0];
-//			rxCount++;
-//			HAL_UART_Receive_IT(huart, rxChar, 1);
-//		}
-//	} else {
-//		rxBuffer[rxCount] = rxChar[0];
-//		rxCount++;
-//		HAL_UART_Receive_IT(huart, rxChar, 1);
-//	}
-//}
-
+/*
+ *
+ */
 void uartReset(UART_HandleTypeDef *huart)
 {
 	huart->RxState = HAL_UART_STATE_READY;
@@ -135,83 +108,40 @@ void uartReset(UART_HandleTypeDef *huart)
  */
 char* intToCharArray(int integer)
 {
-
 	int count = 0;
-    int copy = integer;
+	int copy = integer;
 
-    // Loop ends when count is the same as quantity of numbers in copy
-    while (copy) {
-        copy = copy/10;
-        count++;
-    }
+	// Loop ends when count is the same as quantity of numbers in copy
+	while (copy) {
+		copy = copy/10;
+		count++;
+	}
 
-    // Char array for result
-    char* charArr;
-    charArr = (char*)malloc(count);
+	// Char array for result
+	char* charArr;
+	charArr = (char*)malloc(count);
 
-    // Duplicate char array
-    char charArr1 [count];
+	// Duplicate char array
+	char charArr1 [count];
+	int index = 0;
+	while (integer) {
+		// Modulus with ten to get the last positioned number
+		// Add "0" to get ASCII character
+		charArr1[++index] =  integer % 10 + '0';
+		// Truncate with 10
+		// 0.1 gives int = 0, will then end while loop.
+		integer /= 10;
+	}
 
-    int index = 0;
+	// Reverse array to get the characters in the right position
+	int i;
+	for(i = 0; i < index; i++) {
+		charArr[i] = charArr1[index - i];
+	}
+	// Null character on the last index o
+	// To stop the array memory allocation
+	charArr[i] = '\0';
 
-    while (integer) {
-
-    	// Modulus with ten to get the last positioned number
-    	// Add "0" to get ASCII character
-        charArr1[++index] =  integer % 10 + '0';
-
-        // Truncate with 10
-        // 0.1 gives int = 0, will then end while loop.
-        integer /= 10;
-    }
-
-    // Reverse array to get the characters in the right position
-    int i;
-    for(i = 0; i < index; i++) {
-        charArr[i] = charArr1[index - i];
-    }
-
-    // Null character on the last index o
-    // To stop the array memory allocation
-    charArr[i] = '\0';
-
-    // Return char array
-    return (char*)charArr;
+	// Return char array
+	return (char*)charArr;
 }
-void USAR_UART_IDLECallback(UART_HandleTypeDef *huart)
-{	uint8_t receive_buff[255];
-	//Stop this DMA transmission
-    HAL_UART_DMAStop(&huart5);
-
-    //Calculate the length of the received data
-    uint8_t data_length  = BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_uart5_rx);
-
-	//Test function: Print out the received data
-//    printf("Receive Data(length = %d): ",data_length);
-//    uartPrintString("\r\nIn Uart IDLE callback\r\n");
-    //Copy data from rxBuffer to mainBuffer
-    memcpy(mainBuffer,rxBuffer,data_length);
-    mainBufferCount = data_length;
-
-//    printf("\r\n");
-
-	//Zero Receiving Buffer
-    memset(rxBuffer,0,data_length);
-    data_length = 0;
-
-    //Restart to start DMA transmission of 255 bytes of data at a time
-    HAL_UART_Receive_DMA(&huart5, (uint8_t*)receive_buff, 255);
-}
-
-void UARTreceiveDMA(UART_HandleTypeDef *huart) {
-	__HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);
-	HAL_UART_Receive_DMA(&huart5, (uint8_t*)buff, 255);
-	HAL_Delay(1000);
-	uartPrint(buff, mainBufferCount);
-
-}
-
-
-
-
-

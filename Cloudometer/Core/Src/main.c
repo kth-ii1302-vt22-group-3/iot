@@ -32,7 +32,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define RUN_TEST_PROGRAM			//Define if running testprogram
+#undef RUN_TEST_PROGRAM			//Define if running testprogram
 
 /* USER CODE END PTD */
 
@@ -123,7 +123,6 @@ int main(void)
   {
 	  connectToServer();
 	  uploadTemp();
-//	  discFromServer();		//Needed if server doesn't disconnect
 
 	  //Upload to server interval
 	  HAL_Delay(10000);
