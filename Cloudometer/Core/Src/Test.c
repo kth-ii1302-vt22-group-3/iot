@@ -1,4 +1,5 @@
 #include <test.h>
+#include <stdlib.h>
 #include "usart.h"
 
 extern uint8_t rxBuffer[rxBufferSize];
@@ -9,6 +10,23 @@ extern uint8_t rxCount;
 extern uint8_t rxWait;
 
 void Test_program(void){
+	//	Test_wifiStartup();
+	Test_sensorStartup();
+	while(1){
+		uartPrintString("Humidity is: ");
+		Test_getHumidVal();
+		uartPrintString("Temperature is:");
+		Test_readTemp();
+		//	Test_uploadTemp();
+		//	Test_uartPrint();
+		//	Test_readTemp();
+		//	Test_ATsend();
+		//	Test_UARTtransmit_IT();
+		//	Test_UARTreceive_IT();
+		//	Test_isERROR();
+		//	Test_ConnectWifi();
+
+		HAL_Delay(2000);
 	while(1){
 //	Test_wifiStartup();
 	Test_sensorStartup();
@@ -23,7 +41,24 @@ void Test_program(void){
 	Test_DMA();
 	HAL_Delay(50);
 	}
+}
 
+void Test_getHumidVal(void){
+
+		uint16_t val = getHumidVal();
+		char *humidVal;
+		humidVal = (char *) malloc(sizeof(char) * 2);
+		humidVal[0] = (char)(val / 10) + 48;
+		humidVal[1] = (char)(val % 10) + 48;
+		uartPrint((uint8_t*)humidVal, 2);
+}
+
+void Test_uploadHumid(void){
+	uploadHumid();
+}
+
+void Test_uploadTemp(void){
+	uploadTemp();
 }
 
 void Test_wifiStartup (void){
@@ -42,15 +77,12 @@ void Test_uartPrint (void){
 }
 
 void Test_readTemp (void){
-	while(1){
+
 		uint16_t val = getTempVal();
 		uint8_t tempVal[2];
 		tempVal[0] = (val / 10) + 48;
 		tempVal[1] = (val % 10) + 48;
-
 		uartPrint((uint8_t*)tempVal, 2);
-		HAL_Delay(500);
-	}
 }
 
 

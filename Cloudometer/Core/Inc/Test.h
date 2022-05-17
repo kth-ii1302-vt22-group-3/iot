@@ -12,7 +12,9 @@ void Test_UARTtransmit_IT(void);
 void Test_UARTreceive_IT(void);
 void Test_isERROR(void);
 void Test_wifiStartup (void);
+void Test_uploadTemp(void);
 void Test_ConnectWifi(void);
+void Test_getHumidVal(void);
+void Test_uploadHumid(void);
 void Test_sendTempAnyLengt(void);
 void Test_DMA(void);
-

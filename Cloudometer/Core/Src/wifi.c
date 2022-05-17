@@ -5,9 +5,15 @@ char network[] = "W";
 char password[] = "bogenarlos";
 
 char GETprefix[] = "GET /temperatures/new?value=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
+char GETprefixHumid[] = "GET /temperatures/new?humid=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
 //char GETprefix[] = "GET /temperatures/new?value=";
 //char GETsuffix[] = " HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
 
+/*
+ * @brief	Wifi startup sequence, uses wifi name and password
+ * 			from network[] and password[] char arrays.
+ * 	@author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
 void wifiStartup (void){
 	ATsend("AT+RST\r\n");
 	HAL_Delay(500);
@@ -20,45 +26,52 @@ void wifiStartup (void){
 	ATsend("AT+CWMODE_DEF=1\r\n");
 	HAL_Delay(1000);
 	composeWifiAT();
-//	char *connectWith = composeWifiAT();
-//	ATsend(connectWith);
-//	free(connectWith);
 	HAL_Delay(2000);
 }
 
+/*
+ * @brief	Send AT command to connect to server
+ * @author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
 void connectToServer (void){
 	ATsend("AT+CIPSTART=\"TCP\",\"cloudometer-api.herokuapp.com\",80,60\r\n");
 	HAL_Delay(2000);
 }
 
+/*
+ * @brief	Send AT command to disconnect from server
+ * @author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
 void discFromServer (void){
 	ATsend("AT+CIPCLOSE\r\n");
 	HAL_Delay(1000);
 }
 
+/*
+ * @brief	Sends temperature to server
+ * @param	A 2-length char array[] with temperature
+ * @author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
 void sendTemp (char out[]){
 	GETprefix[28] = out[0];
 	GETprefix[29] = out[1];
-
 	ATsend("AT+CIPSEND=99\r\n");
 	HAL_Delay(500);
 	ATsend(GETprefix);
-//	ATsend(out);
-//	ATsend("\r\n");
+	HAL_Delay(1000);
+}
 
-//	int len = 5;
-//	char *temp;
-//	temp = (char *) calloc(len, sizeof(char));
-//
-//	strcat(temp, out);
-//	ATsend(temp);
-//	free(temp);
-//	static char message[4];
-//	strncat(message, out, 2);
-//	strncat(message, "\r\n", 2);
-//	uartPrintString("This is message : ");
-//	uartPrintString(message);
-//	ATsend(message);
+/*
+ * @brief	Sends temperature to server
+ * @param	A 2-length char array[] with temperature
+ * @author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
+void sendHumid (char out[]){
+	GETprefixHumid[28] = out[0];
+	GETprefixHumid[29] = out[1];
+	ATsend("AT+CIPSEND=99\r\n");
+	HAL_Delay(500);
+	ATsend(GETprefixHumid);
 	HAL_Delay(1000);
 }
 
@@ -104,6 +117,11 @@ void sendTempAnyLength (char out[]){
 
 
 
+/*
+ * @brief	Function to connect to the wifi specified in network
+ * 			and password arrays
+ * 	@author	Jesper Jansson, Natasha Donner, Wilhelm Nordgren
+ */
 void composeWifiAT (void){
 	int len = sizeof(network) - 1 + sizeof(password) - 1 + 17;
 	char *connect;
@@ -116,11 +134,6 @@ void composeWifiAT (void){
 	strcat(connect, "\"\r\n\0");
 	ATsend(connect);
 	free(connect);
-//	char *connectWith;
-//	connectWith = (char *) malloc(sizeof(char) * len);
-//	strncat(connectWith, connect, len);
-//	return connectWith;
-//	return connect;
 }
 
 
