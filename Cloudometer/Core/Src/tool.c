@@ -45,6 +45,15 @@ void uartPrint (uint8_t out[], uint8_t length){
 }
 
 /*
+ *@brief	Receives data sent over UART until end transmission is detected.
+ *@author	Jesper Jansson
+ */
+void UARTreceiveIT(UART_HandleTypeDef *huart){
+	rxWait = 1;
+	HAL_UART_Receive_IT(huart, rxChar, 1);	// Start receiving first byte
+}
+
+/*
  *@brief	Sends an AT command over UART4. Prints the command and received answer over UART5.
  *@brief	Example: ATsend("AT");
  *@author	Jesper Jansson
@@ -55,7 +64,7 @@ void ATsend (char out[]){
 }
 
 /*
- *@brief	Checks if the four first characters of an array matches the the string "ERRO".
+ *@brief	Checks if the five first characters of an array matches the the string "ERROR".
  *@brief	Example: isERROR(arr);
  *@param	uint8_t arr[]
  *@return	uint8_t; 1 if true, 0 if false.
@@ -72,7 +81,8 @@ uint8_t isERROR(uint8_t arr[]) {
 }
 
 /*
- * @brief
+ * @brief Callback function for the UARTReceiveIT function. Checks received byte and copies it to the rxBuffer. Calls for reception of the next byte until end of transmission is detected
+ * @author Jesper Jansson
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	rxBuffer[rxCount] = rxChar[0];
@@ -80,12 +90,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	if(rxChar[0] == 'K') {
 		if(rxBuffer[rxCount - 2] == 'O'){
 			rxWait = 0;
+			rxCount = 0;
 		} else {
 			HAL_UART_Receive_IT(huart, rxChar, 1);
 		}
 	} else if (rxCount == 5) {
 		if(isERROR(rxBuffer)) {
 			rxWait = 0;
+			rxCount = 0;
 		}
 	} else {
 		HAL_UART_Receive_IT(huart, rxChar, 1);

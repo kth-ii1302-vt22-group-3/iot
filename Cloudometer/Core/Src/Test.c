@@ -93,23 +93,26 @@ void Test_readTemp (void){
 }
 
 /*
- *
+ *@brief	Tests the UARTreceiveIT function by requesting input from serial terminal and echoing the received data
+ *@author	Jesper Jansson
  */
 void Test_UARTreceive_IT(void) {
-	uartPrintString("Is everything OK?");
+	uartPrintString("Write something!");
 	UARTreceiveIT(&huart5);
-	while(1);
+	while(rxWait) {
+
+	}
+	uartPrint(rxBuffer, rxBufferSize);
 }
 
 /*
- *
+ *@brief	Tests the ATsend function by sending a series of AT commands that instruct the Wifi module to connect and disconnest to a network
+ *@author	Jesper Jansson
  */
 void Test_ATsend (void){
-	char gmr[] = "AT+GMR\r\n";
 	char cwmode[] = "AT+CWMODE=1\r\n";
 	char cwjap[] = "AT+CWJAP=\"jeppes\",\"2e492b166007\"\r\n";
 	char cwqap[] = "AT+CWQAP\r\n";
-	ATsend(gmr);
 	ATsend(cwmode);
 	uartPrintString("Connecting to Wifi...");
 	ATsend(cwjap);
@@ -119,7 +122,8 @@ void Test_ATsend (void){
 }
 
 /*
- *
+ *@brief	Tests the isERROR function by giving it a correct input string and an incorrect input string and printing the returned result to the serial terminal
+ *@author	Jesper Jansson
  */
 void Test_isERROR(void) {
 	uint8_t error[] = {'E','R','R','O','R'};
