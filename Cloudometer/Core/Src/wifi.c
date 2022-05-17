@@ -1,13 +1,10 @@
 #include "wifi.h"
-#include <stdlib.h>
 
 char network[] = "W";
 char password[] = "bogenarlos";
 
 char GETprefix[] = "GET /temperatures/new?value=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
 char GETprefixHumid[] = "GET /temperatures/new?humid=00 HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
-//char GETprefix[] = "GET /temperatures/new?value=";
-//char GETsuffix[] = " HTTP/1.1\r\nHost: cloudometer-api.herokuapp.com\r\nConnection: close\r\n\r\n";
 
 /*
  * @brief	Wifi startup sequence, uses wifi name and password
@@ -75,9 +72,10 @@ void sendHumid (char out[]){
 	HAL_Delay(1000);
 }
 
+/*
+ *
+ */
 void sendTempAnyLength (char out[]){
-
-
 //	New version that can take any temperature size and sends it to server.
 	int8_t size_t = strlen(out);
 	char* size_out = intToCharArray(size_t);
@@ -168,8 +166,3 @@ void wifiConnect(char wifi[], char password[]){
 	ATsend(cwmode);
 	ATsend(cwjap);
 }
-
-
-
-
-

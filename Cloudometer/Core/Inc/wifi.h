@@ -1,5 +1,6 @@
 #include "tool.h"
 #include <string.h>
+#include <stdlib.h>
 
 void wifiStartup (void);
 void connectToServer (void);
