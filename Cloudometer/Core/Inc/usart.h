@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#define BUFFER_SIZE (255)
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart4;
@@ -44,7 +44,7 @@ void MX_UART4_Init(void);
 void MX_UART5_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void USER_UART_IRQHandler(UART_HandleTypeDef *huart);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

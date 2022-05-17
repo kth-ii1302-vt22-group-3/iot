@@ -1,13 +1,15 @@
 #include <test.h>
 #include <stdlib.h>
+#include "usart.h"
 
 extern uint8_t rxBuffer[rxBufferSize];
+extern uint8_t mainBuffer[rxBufferSize];
+extern uint8_t mainBufferCount;
 extern uint8_t rxChar[1];
 extern uint8_t rxCount;
 extern uint8_t rxWait;
 
 void Test_program(void){
-
 	//	Test_wifiStartup();
 	Test_sensorStartup();
 	while(1){
@@ -25,6 +27,19 @@ void Test_program(void){
 		//	Test_ConnectWifi();
 
 		HAL_Delay(2000);
+	while(1){
+//	Test_wifiStartup();
+	Test_sensorStartup();
+	//	Test_uartPrint();
+//		Test_readTemp();
+	//	Test_ATsend();
+	//	Test_UARTtransmit_IT();
+	//	Test_UARTreceive_IT();
+	//	Test_isERROR();
+//	Test_ConnectWifi();
+//	Test_sendTempAnyLengt();
+	Test_DMA();
+	HAL_Delay(50);
 	}
 }
 
@@ -112,5 +127,24 @@ void Test_ConnectWifi(void)
 	char wifi[] = "iPhone";
 	char password[] = "natashadonner1";
 	wifiConnect(wifi,password);
+
+}
+
+void Test_sendTempAnyLengt(void)
+{
+
+	int8_t val = getTempVal();
+	char* value = intToCharArray(val);
+	char test[] = "1237890";
+	sendTempAnyLength(value);
+	sendTempAnyLength(test);
+
+}
+
+void Test_DMA(void)
+{
+	uartPrintString("RESPONSE");
+	UARTreceiveDMA(&huart5);
+	uartPrint(mainBuffer, mainBufferCount);
 
 }
