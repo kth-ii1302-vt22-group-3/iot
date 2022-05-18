@@ -121,7 +121,7 @@ int main(void)
 //	  discFromServer();		//Needed if server doesn't disconnect
 
 	  //Upload to server interval
-	  HAL_Delay(10000);
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

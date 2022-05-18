@@ -29,7 +29,12 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
+<<<<<<< Updated upstream
 
+=======
+//#define BUFFER_SIZE (255)
+#include "uartReceive.h"
+>>>>>>> Stashed changes
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart4;
