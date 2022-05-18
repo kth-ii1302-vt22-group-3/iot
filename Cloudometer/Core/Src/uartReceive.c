@@ -6,7 +6,7 @@
  */
 #include <uartReceive.h>
 
-extern rxBuffer[BUFFER_SIZE];
+extern uint8_t rxBuffer[BUFFER_SIZE];
 uint8_t rspBuffer[BUFFER_SIZE];
 uint8_t rspBufferCount = 0;
 uint8_t rspOK = 0;

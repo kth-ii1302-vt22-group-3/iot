@@ -7,7 +7,8 @@ extern uint8_t rxChar[1];
 extern uint8_t rxCount;
 extern uint8_t rxWait;
 
-/*
+/*@brief	TDD test program, runs when test program is defined in main
+ * @author	Wilhelm Nordgren, Jesper Jansson, Natasha Donner
  *
  */
 void Test_program(void){
@@ -29,8 +30,8 @@ void Test_program(void){
 	}
 }
 
-/*
- *
+/*@brief	Tests getHumidVal() function, sends value over uart for debugging
+ *@author	Wilhelm Nordgren
  */
 void Test_getHumidVal(void){
 	uartPrintString("Humidity is: ");
@@ -42,37 +43,37 @@ void Test_getHumidVal(void){
 	uartPrint((uint8_t*)humidVal, 2);
 }
 
-/*
- *
+/*@brief	Tests uploadHumid() function
+ *@author	Wilhelm Nordgren
  */
 void Test_uploadHumid(void){
 	uploadHumid();
 }
 
-/*
- *
+/*@brief	Tests uploadTemp() function
+ *@author	Wilhelm Nordgren
  */
 void Test_uploadTemp(void){
 	uploadTemp();
 }
 
-/*
- *
+/*@brief	Tests wifiStartup() function
+ *@author	Wilhelm Nordgren
  */
 void Test_wifiStartup (void){
 	wifiStartup();
 //	connectToServer();
 }
 
-/*
- *
+/*@brief	Tests sensorStartup() function
+ *@author	Wilhelm Nordgren
  */
 void Test_sensorStartup (void){
 	sensorStartup();
 }
 
-/*
- *
+/*@brief	Tests uartPrint() function
+ *@author	Wilhelm Nordgren
  */
 void Test_uartPrint (void){
 	uint8_t intArray[8] = {1+48, 2+48, 3+48, 4+48, 5+48, 6+48};
@@ -80,8 +81,8 @@ void Test_uartPrint (void){
 	uartPrintString("Hello World!");
 }
 
-/*
- *
+/*@brief	Tests readTemp() function
+ *@author	Wilhelm Nordgren
  */
 void Test_readTemp (void){
 	uartPrintString("Temperature is:");

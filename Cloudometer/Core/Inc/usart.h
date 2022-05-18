@@ -30,6 +30,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 //#define BUFFER_SIZE (255)
+#include "uartReceive.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart4;
